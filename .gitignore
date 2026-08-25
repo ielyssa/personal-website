@@ -36,3 +36,13 @@ build
 tsconfig.tsbuildinfo
 .ncurc.js
 knip.jsonc
+
+# next
+next-env.d.ts
+*.tsbuildinfo
+
+# testing
+test-results
+playwright-report
+blob-report
+playwright/.cache

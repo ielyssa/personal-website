@@ -1,3 +1,24 @@
+### v4.0.0
+
+###### Aug 25, 2026
+
+- [New] Migrate from Vite SPA to Next.js 15 App Router — every route is now statically rendered with full server HTML (SEO, social previews, AI-crawler visibility).
+- [New] Content layer: MDX collections with zod-validated frontmatter (`content/`) — adding a post or venture requires no code changes.
+- [New] Founder-first repositioning across all copy, structured data, and metadata (Founder & CEO of ATAS; no skill-chip branding).
+- [New] Pages: `/work` index + 5 venture pages (incl. new IMIZI page), `/writing` index with tag filters, `/press` kit, `/now`, `/contact`, `/privacy`.
+- [New] Image pipeline: `scripts/prep-media.mjs` (sharp) — 31 MB of PNGs became ~1 MB of WebP masters with blur placeholders; served via `next/image` (AVIF/WebP, responsive srcsets).
+- [New] Branded OG image engine: 16 generated 1200×630 cards via `scripts/generate-og.mjs` (runs prebuild).
+- [New] SEO suite: per-route Metadata API, JSON-LD entity graph (Person/Organization/WebSite/Article/Breadcrumb), generated `sitemap.xml` + `robots.txt`, RSS feed (`/feed.xml`), `llms.txt` for AI crawlers, legacy 301 redirects, real 404.
+- [New] Accessibility: a11y carousel (keyboard, focus-pause, reduced-motion, ≥44px targets), skip link, focus management, AA contrast pass (axe-verified in CI).
+- [New] Contact form (Resend, env-gated with mailto fallback), newsletter capture (Buttondown, env-gated).
+- [New] Analytics: Vercel Analytics + Speed Insights + Plausible facade behind one `trackEvent` API.
+- [New] Quality engineering: Vitest unit suite (content + SEO gates), Playwright e2e smoke + axe scans, GitHub Actions CI, Lighthouse CI budgets, security headers + CSP report-only.
+- [Changed] Single font family (DM Sans Variable via `next/font`); Barlow removed.
+- [Changed] Dark mode systemized with no-flash inline script and `data-theme` CSS variables.
+- [Removed] Vite, react-router, apexcharts, simplebar, es-toolkit, dead components; duplicate lockfiles (now pnpm-only).
+
+---
+
 ### v3.0.0
 
 ###### Apr 3, 2025

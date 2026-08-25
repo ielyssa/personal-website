@@ -1,71 +1,36 @@
-// eslint.config.mjs
-import globals from 'globals';
-import eslintJs from '@eslint/js';
-import eslintTs from 'typescript-eslint';
-import reactPlugin from 'eslint-plugin-react';
-import reactHooksPlugin from 'eslint-plugin-react-hooks';
+// @ts-check
+import { FlatCompat } from '@eslint/eslintrc';
 
-// ----------------------------------------------------------------------
-
-/**
- * @rules common
- */
-const commonRules = () => ({
-  ...reactHooksPlugin.configs.recommended.rules,
-  'func-names': 1,
-  'no-bitwise': 2,
-  'no-unused-vars': 0,
-  'object-shorthand': 1,
-  'no-useless-rename': 1,
-  'default-case-last': 2,
-  'consistent-return': 2,
-  'no-constant-condition': 1,
-  'default-case': [2, { commentPattern: '^no default$' }],
-  'lines-around-directive': [2, { before: 'always', after: 'always' }],
-  'arrow-body-style': 0,
-  // react
-  'react/jsx-key': 0,
-  'react/prop-types': 0,
-  'react/display-name': 0,
-  'react/no-children-prop': 0,
-  'react/jsx-boolean-value': 2,
-  'react/self-closing-comp': 2,
-  'react/react-in-jsx-scope': 0,
-  'react/jsx-no-useless-fragment': [1, { allowExpressions: true }],
-  'react/jsx-curly-brace-presence': [2, { props: 'never', children: 'never' }],
-  // typescript
-  '@typescript-eslint/no-shadow': 2,
-  '@typescript-eslint/no-explicit-any': 0,
-  '@typescript-eslint/no-empty-object-type': 0,
-  '@typescript-eslint/consistent-type-imports': 1,
-  '@typescript-eslint/no-unused-vars': [1, { args: 'none' }],
+const compat = new FlatCompat({
+  baseDirectory: import.meta.dirname,
 });
 
-/**
- * Custom ESLint configuration.
- */
-export const customConfig = {
-  plugins: {
-    'react-hooks': reactHooksPlugin,
-  },
-  rules: {
-    ...commonRules(),
-  },
-};
-
-// ----------------------------------------------------------------------
-
-export default [
-  { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
-  { ignores: ['*', '!src/', '!eslint.config.*'] },
+const eslintConfig = [
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
   {
-    languageOptions: {
-      globals: { ...globals.browser, ...globals.node },
-    },
-    settings: { react: { version: 'detect' } },
+    ignores: [
+      '.next/**',
+      'node_modules/**',
+      'next-env.d.ts',
+      'playwright-report/**',
+      'test-results/**',
+      'scripts/**',
+      'public/**',
+    ],
   },
-  eslintJs.configs.recommended,
-  ...eslintTs.configs.recommended,
-  reactPlugin.configs.flat.recommended,
-  customConfig,
+  {
+    rules: {
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'no-console': ['error', { allow: ['warn', 'error', 'info'] }],
+      'react-hooks/exhaustive-deps': 'error',
+    },
+  },
+  {
+    files: ['src/lib/icon-sets.ts'],
+    rules: {
+      'import/no-anonymous-default-export': 'off',
+    },
+  },
 ];
+
+export default eslintConfig;
