@@ -1,11 +1,18 @@
 # Build directories
-build/*
-dist/*
-public/*
-**/out/*
 **/.next/*
 **/node_modules/*
+**/out/*
+**/dist/*
+**/build/*
+**/test-results/*
+**/playwright-report/*
 
-yarn.lock
-package-lock.json
-jsconfig.json
+# Lockfiles & generated
+pnpm-lock.yaml
+next-env.d.ts
+*.tsbuildinfo
+
+# Content originals & generated media (binary, formatted by scripts)
+public/media/*
+public/og/*
+content/originals/*

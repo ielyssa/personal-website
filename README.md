@@ -14,6 +14,7 @@ Production Next.js 15 (App Router) website — statically rendered, content-driv
 | Content | MDX collections in `content/` with zod-validated frontmatter |
 | Media | `sharp` master pipeline → WebP + blur placeholders → `next/image` (AVIF/WebP) |
 | Fonts | DM Sans Variable via `next/font` (single family, preloaded) |
+| Icons | 19 icons embedded offline (zero runtime requests) |
 | Email | Resend (contact form, env-gated) · Buttondown (newsletter, env-gated) |
 | Analytics | Vercel Analytics + Speed Insights; Plausible behind `trackEvent` facade (env-gated) |
 | Testing | Vitest (content + SEO gates) · Playwright (smoke + axe a11y) · Lighthouse CI budgets |
@@ -29,34 +30,20 @@ pnpm dev        # http://localhost:3000
 Full verification (what CI runs):
 
 ```bash
-pnpm run og     # regenerate OG images (also runs automatically prebuild)
-pnpm run ci     # lint + typecheck + unit tests + build
-pnpm exec playwright test   # e2e smoke + accessibility (builds must exist)
+pnpm run ci                 # lint + typecheck + unit tests + build
+pnpm exec playwright test   # e2e smoke + accessibility
 ```
 
-## Editing content (no code required)
+## 📖 Making changes — read the guide
 
-| To change… | Edit… |
-|---|---|
-| Name, role line, contacts, socials | `content/site.ts` |
-| Home hero/about copy, focus metrics | `src/features/identity/*`, `content/home.ts` |
-| A venture / case study | `content/work/<slug>.mdx` (frontmatter: name, status, period, summary, cover, facts, gallery) |
-| A blog post | `content/writing/<slug>.mdx` (frontmatter: title, slug, summary, publishedAt, updatedAt, tags, cover) |
-| Speaking topics / engagements | `content/speaking.ts` |
-| Press bios & fact sheet | `content/press.ts` |
-| “Now” page | `content/now.mdx` |
+**Everything you need to modify this site is in [`docs/DEVELOPER_GUIDE.md`](docs/DEVELOPER_GUIDE.md):**
 
-Rules enforced by tests + build:
-- Dates are ISO (`YYYY-MM-DD`).
-- Slugs are kebab-case and unique.
-- Every image referenced must exist in `src/lib/media-manifest.json` (run `pnpm run media` after adding originals to `content/originals/`).
+- Step-by-step recipes: publish a post, add a venture, swap images, change colors/fonts, add pages, update the press kit…
+- Architecture reference: rendering model, content pipeline, image pipeline, SEO system, theme rules
+- Troubleshooting table for every known failure mode
+- Conventions and guardrails that keep the site fast and accessible
 
-### Adding an image
-
-1. Drop the original into `content/originals/<folder>/`.
-2. Add a job line in `scripts/prep-media.mjs`.
-3. Run `pnpm run media` — the WebP master + blur entry are generated.
-4. Reference the `/media/...` path in content.
+The short version: **content lives in `content/` and needs no code changes**; the build validates it and regenerates sitemap, RSS, and `llms.txt` automatically.
 
 ## Routes
 
@@ -88,7 +75,7 @@ Copy `.env.example` → `.env.local`. Everything except the site URL is optional
 ## Project structure
 
 ```
-content/            # single source of truth for identity + all content
+content/            # single source of truth for identity + all content (edit here first)
   originals/        # source images (never served directly)
 src/
   app/              # routes, metadata, sitemap/robots/feed/llms, api/contact
@@ -99,7 +86,7 @@ src/
 scripts/            # prep-media.mjs (sharp), generate-og.mjs (branded OG cards)
 e2e/                # Playwright smoke + axe accessibility
 tests/              # Vitest: content validation + SEO/JSON-LD gates
-docs/               # audit, implementation plan, runbook, decision records
+docs/               # DEVELOPER_GUIDE.md (start here), runbook, decisions, perf baseline, history
 ```
 
 ## Performance budgets (CI-enforced via Lighthouse)
@@ -113,7 +100,7 @@ docs/               # audit, implementation plan, runbook, decision records
 - Framework preset: Next.js (auto). Region: `fra1`. Package manager: pnpm.
 - Set the env vars above in the Vercel dashboard.
 - Deploys run on every push to `main` (CI must pass first).
-- See `docs/runbook.md` for launch/rollback/maintenance procedures.
+- See [`docs/runbook.md`](docs/runbook.md) for launch/rollback/maintenance procedures.
 
 ## License
 

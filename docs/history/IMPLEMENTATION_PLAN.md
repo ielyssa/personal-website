@@ -1,6 +1,6 @@
 # ielyssa.com — Implementation Plan (v1.0 → Production-Ready)
 
-> **Companion to:** `docs/AUDIT.md` (findings referenced throughout by ID — `BRAND-*`, `PERF-*`, `SEO-*`, `ARCH-*`, `CODE-*`, `UX-*`, `INFRA-*`).
+> **Companion to:** `AUDIT.md` (same folder — findings referenced throughout by ID — `BRAND-*`, `PERF-*`, `SEO-*`, `ARCH-*`, `CODE-*`, `UX-*`, `INFRA-*`).
 > **Contract:** When every task in this document is implemented **and** every item in the Definition of Done (§11) passes, ielyssa.com is production-ready. Nothing from the audit is left unresolved; anything intentionally deferred is explicitly listed in §10.
 
 ---
