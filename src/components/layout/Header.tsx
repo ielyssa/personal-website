@@ -1,40 +1,80 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { alpha, useColorScheme } from '@mui/material/styles';
+import { useColorScheme } from '@mui/material/styles';
 
 import { Iconify } from '@/components/ui/iconify';
 import { NAV_ITEMS, SOCIAL_PROFILES, isHomePathname } from '@/lib/nav';
 
-const HEADER_HEIGHT = 72;
+const HEADER_HEIGHT = 76;
+const HEADER_HEIGHT_COMPACT = 60;
+const REVEAL_THRESHOLD = 12; // px of scroll before the header starts reacting at all
+const HIDE_AFTER = HEADER_HEIGHT + 40; // don't hide until scrolled past the header's own height
+
+const UNDERLINE_SX = {
+  backgroundImage: 'linear-gradient(currentColor, currentColor)',
+  backgroundSize: '0% 1px',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: '0 100%',
+  transition: 'background-size 320ms cubic-bezier(0.4, 0, 0.2, 1)',
+};
 
 export function Header() {
   const pathname = usePathname();
   const { mode, setMode } = useColorScheme();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const [scrolled, setScrolled] = useState(false);
+  const [compact, setCompact] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const home = isHomePathname(pathname);
 
+  // Tracks scroll direction to hide the header on the way down (more room
+  // to read) and bring it back the instant the user scrolls up — a single
+  // deliberate response to intent, not a decorative transition.
+  const lastScrollY = useRef(0);
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
+    lastScrollY.current = window.scrollY;
+
+    let raf = 0;
+    const measure = () => {
+      raf = 0;
+      const y = window.scrollY;
+      const delta = y - lastScrollY.current;
+
+      setCompact(y > REVEAL_THRESHOLD);
+
+      if (y <= HIDE_AFTER) {
+        setHidden(false);
+      } else if (delta > 4) {
+        setHidden(true);
+        setDrawerOpen(false);
+      } else if (delta < -4) {
+        setHidden(false);
+      }
+
+      lastScrollY.current = y;
+    };
+
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(measure);
+    };
+
+    measure();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -78,39 +118,41 @@ export function Header() {
   };
 
   const drawer = (
-    <Box sx={{ py: 3, px: 2 }}>
-      <List>
+    <Box sx={{ py: 4, px: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Stack component="nav" spacing={2.5} sx={{ mt: 2 }}>
         {NAV_ITEMS.map((item) => (
-          <ListItem key={item.label} disablePadding sx={{ mb: 0.5 }}>
-            <ListItemButton
-              component={Link}
-              href={item.href}
-              onClick={handleSectionClick(item)}
-              selected={isActive(item)}
-              sx={{
-                borderRadius: 1.5,
-                '&.Mui-selected': { bgcolor: 'primary.main', color: 'primary.contrastText', '&:hover': { bgcolor: 'primary.dark' } },
-              }}
-            >
-              <ListItemText primary={item.label} />
-            </ListItemButton>
-          </ListItem>
+          <Typography
+            key={item.label}
+            component={Link}
+            href={item.href}
+            onClick={handleSectionClick(item)}
+            aria-current={isActive(item) ? 'page' : undefined}
+            sx={{
+              fontSize: '1.5rem',
+              fontWeight: isActive(item) ? 800 : 500,
+              color: isActive(item) ? 'text.primary' : 'text.secondary',
+              textDecoration: 'none',
+              letterSpacing: '-0.01em',
+            }}
+          >
+            {item.label}
+          </Typography>
         ))}
-      </List>
-      <Stack direction="row" spacing={1} sx={{ px: 2, mt: 3 }}>
+      </Stack>
+
+      <Stack direction="row" spacing={2.5} sx={{ mt: 'auto', pt: 4, borderTop: '1px solid', borderColor: 'divider' }}>
         {SOCIAL_PROFILES.map((social) => (
-          <IconButton
+          <Typography
             key={social.label}
-            size="small"
             component="a"
             href={social.href}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={social.label}
-            sx={{ color: 'text.secondary' }}
+            sx={{ display: 'inline-flex', color: 'text.secondary', '&:hover': { color: 'text.primary' } }}
           >
             <Iconify icon={social.icon} width={20} />
-          </IconButton>
+          </Typography>
         ))}
       </Stack>
     </Box>
@@ -126,84 +168,77 @@ export function Header() {
           left: 0,
           right: 0,
           zIndex: 1100,
-          height: HEADER_HEIGHT,
+          height: compact ? HEADER_HEIGHT_COMPACT : HEADER_HEIGHT,
           display: 'flex',
           alignItems: 'center',
-          transition: 'background-color 240ms ease, box-shadow 240ms ease, border-color 240ms ease',
-          bgcolor: scrolled ? (th) => alpha(th.palette.background.paper, 0.82) : 'transparent',
-          borderBottom: 1,
-          borderColor: scrolled ? 'divider' : 'transparent',
-          backdropFilter: scrolled ? 'blur(12px)' : 'none',
+          transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
+          transition:
+            'transform 320ms cubic-bezier(0.4, 0, 0.2, 1), height 240ms ease, background-color 240ms ease, border-color 240ms ease',
+          bgcolor: compact ? 'background.default' : 'transparent',
+          borderBottom: '1px solid',
+          borderColor: compact ? 'divider' : 'transparent',
         }}
       >
-        <Box sx={{ width: '100%', maxWidth: 1240, mx: 'auto', px: { xs: 2, md: 3 } }}>
+        <Box sx={{ width: '100%', maxWidth: 1240, mx: 'auto', px: { xs: 2.5, md: 3 } }}>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <Link href="/" aria-label="Home" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-              <Logo />
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: 800,
-                  display: { xs: 'none', sm: 'block' },
-                  background: (th) => `linear-gradient(135deg, ${th.palette.primary.main}, ${th.palette.secondary.main})`,
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
-                I. Elyssa
-              </Typography>
-            </Link>
+            <Typography
+              component={Link}
+              href="/"
+              aria-label="Home"
+              sx={{
+                fontWeight: 800,
+                fontSize: '1.05rem',
+                letterSpacing: '-0.01em',
+                color: 'text.primary',
+                textDecoration: 'none',
+              }}
+            >
+              IRANKUNDA Elyssa
+            </Typography>
 
-            <Stack direction="row" spacing={0.5} sx={{ display: { xs: 'none', lg: 'flex' } }}>
+            <Stack
+              component="nav"
+              direction="row"
+              spacing={{ lg: 4, xl: 5 }}
+              sx={{ display: { xs: 'none', lg: 'flex' } }}
+            >
               {NAV_ITEMS.map((item) => (
-                <Button
+                <Typography
                   key={item.label}
                   component={Link}
                   href={item.href}
                   onClick={handleSectionClick(item)}
                   aria-current={isActive(item) ? 'page' : undefined}
                   sx={{
-                    color: isActive(item) ? 'primary.dark' : 'text.primary',
+                    fontSize: '0.95rem',
                     fontWeight: isActive(item) ? 700 : 500,
-                    minWidth: 64,
-                    position: 'relative',
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      bottom: 6,
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      width: isActive(item) ? '56%' : 0,
-                      height: 2,
-                      bgcolor: 'primary.main',
-                      borderRadius: 1,
-                      transition: 'width 240ms ease',
-                    },
-                    '&:hover::after': { width: '56%' },
+                    color: isActive(item) ? 'text.primary' : 'text.secondary',
+                    textDecoration: 'none',
+                    display: 'inline-block',
+                    ...UNDERLINE_SX,
+                    backgroundSize: isActive(item) ? '100% 1px' : '0% 1px',
+                    '&:hover': { backgroundSize: '100% 1px', color: 'text.primary' },
                   }}
                 >
                   {item.label}
-                </Button>
+                </Typography>
               ))}
             </Stack>
 
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Tooltip title={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
-                <IconButton
-                  aria-label="Toggle color scheme"
-                  onClick={() => setMode(mode === 'dark' ? 'light' : 'dark')}
-                  sx={{ color: 'text.primary' }}
-                >
-                  <Iconify icon={mode === 'dark' ? 'solar:sun-bold' : 'solar:moon-bold'} width={22} />
-                </IconButton>
-              </Tooltip>
+            <Stack direction="row" spacing={0.5} alignItems="center">
+              <IconButton
+                aria-label="Toggle color scheme"
+                onClick={() => setMode(mode === 'dark' ? 'light' : 'dark')}
+                sx={{ color: 'text.primary' }}
+              >
+                <Iconify icon={mode === 'dark' ? 'solar:sun-bold' : 'solar:moon-bold'} width={20} />
+              </IconButton>
               <IconButton
                 aria-label="Open navigation menu"
                 onClick={() => setDrawerOpen(true)}
                 sx={{ display: { xs: 'flex', lg: 'none' }, color: 'text.primary' }}
               >
-                <Iconify icon="solar:hamburger-menu-bold" width={24} />
+                <Iconify icon="solar:hamburger-menu-bold" width={22} />
               </IconButton>
             </Stack>
           </Stack>
@@ -215,35 +250,10 @@ export function Header() {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         sx={{ display: { xs: 'block', lg: 'none' } }}
-        slotProps={{ paper: { sx: { width: 290 } } }}
+        slotProps={{ paper: { sx: { width: { xs: '100%', sm: 340 }, bgcolor: 'background.default' } } }}
       >
         {drawer}
       </Drawer>
     </>
   );
 }
-
-function Logo() {
-  return (
-    <Box
-      sx={{
-        width: 38,
-        height: 38,
-        borderRadius: 2,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'primary.contrastText',
-        fontWeight: 800,
-        fontSize: 15,
-        letterSpacing: '-0.02em',
-        background: (th) => `linear-gradient(135deg, ${th.palette.primary.main}, ${th.palette.secondary.main})`,
-        boxShadow: (th) => th.customShadows.z8,
-      }}
-      aria-hidden
-    >
-      IE
-    </Box>
-  );
-}
-

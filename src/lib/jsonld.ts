@@ -2,58 +2,139 @@ import { SITE } from '@content/site';
 
 import { absoluteUrl } from './seo';
 
+function canonicalRoot() {
+  return absoluteUrl('/').replace(/\/$/, '');
+}
+
 export function personNode() {
+  const root = canonicalRoot();
   return {
     '@type': 'Person',
-    '@id': `${SITE.url}/#person`,
+    '@id': `${root}/#person`,
     name: SITE.name,
     givenName: 'Elyssa',
     familyName: 'IRANKUNDA',
     jobTitle: 'Founder & CEO',
     description: SITE.positioningLine,
-    url: `${SITE.url}/`,
+    url: `${root}/`,
     email: `mailto:${SITE.email}`,
     telephone: SITE.phone,
+    image: absoluteUrl('/media/person/elyssa-avatar-800.webp'),
+    nationality: { '@type': 'Country', name: 'Rwanda' },
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Kigali',
+      addressCountry: 'RW',
+    },
     homeLocation: { '@type': 'Place', name: SITE.location },
-    worksFor: { '@id': `${SITE.url}/work/atas#organization` },
+    knowsAbout: [
+      'Rwanda-first artificial intelligence',
+      'Kinyarwanda language technology',
+      'AI infrastructure',
+      'education technology',
+      'entrepreneurship in Africa',
+    ],
+    worksFor: { '@id': `${root}/work/atas#organization` },
     sameAs: [...Object.values(SITE.socials)],
   };
 }
 
 export function organizationNode() {
+  const root = canonicalRoot();
   return {
     '@type': 'Organization',
-    '@id': `${SITE.url}/work/atas#organization`,
+    '@id': `${root}/work/atas#organization`,
     name: SITE.atas.shortName,
     alternateName: SITE.atas.name,
     url: SITE.atas.site,
+    description: 'A Rwandan AI research and product company building systems that understand Rwanda.',
     logo: absoluteUrl('/media/logos/atas.webp'),
+    image: absoluteUrl('/media/logos/atas.webp'),
     foundingDate: SITE.foundedAtas,
     foundingLocation: { '@type': 'Place', name: 'Kigali, Rwanda' },
-    founder: { '@id': `${SITE.url}/#person` },
+    areaServed: { '@type': 'Country', name: 'Rwanda' },
+    knowsAbout: ['Artificial intelligence', 'Kinyarwanda language technology', 'Education technology'],
+    founder: { '@id': `${root}/#person` },
     sameAs: [SITE.atas.linkedin, SITE.atas.x, SITE.atas.instagram, SITE.atas.youtube],
   };
 }
 
 export function websiteNode() {
+  const root = canonicalRoot();
   return {
     '@type': 'WebSite',
-    '@id': `${SITE.url}/#website`,
-    url: `${SITE.url}/`,
+    '@id': `${root}/#website`,
+    url: `${root}/`,
     name: SITE.name,
     description: SITE.tagline,
-    publisher: { '@id': `${SITE.url}/#person` },
+    publisher: { '@id': `${root}/#person` },
+    copyrightHolder: { '@id': `${root}/#person` },
     inLanguage: 'en',
   };
 }
 
 export function profilePageNode() {
+  const root = canonicalRoot();
   return {
     '@type': 'ProfilePage',
-    '@id': `${SITE.url}/#profilepage`,
-    url: `${SITE.url}/`,
+    '@id': `${root}/#profilepage`,
+    url: `${root}/`,
     name: SITE.name,
-    mainEntity: { '@id': `${SITE.url}/#person` },
+    mainEntity: { '@id': `${root}/#person` },
+    isPartOf: { '@id': `${root}/#website` },
+    inLanguage: 'en',
+  };
+}
+
+export function webPageNode(input: {
+  path: string;
+  name: string;
+  description: string;
+  type?: 'WebPage' | 'ContactPage';
+  dateModified?: string;
+}) {
+  const root = canonicalRoot();
+  const url = absoluteUrl(input.path);
+  return {
+    '@type': input.type ?? 'WebPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: input.name,
+    description: input.description,
+    isPartOf: { '@id': `${root}/#website` },
+    about: { '@id': `${root}/#person` },
+    inLanguage: 'en',
+    ...(input.dateModified ? { dateModified: input.dateModified } : {}),
+  };
+}
+
+export function collectionPageNode(input: { path: string; name: string; description: string }) {
+  const root = canonicalRoot();
+  const url = absoluteUrl(input.path);
+  return {
+    '@type': 'CollectionPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: input.name,
+    description: input.description,
+    isPartOf: { '@id': `${root}/#website` },
+    about: { '@id': `${root}/#person` },
+    inLanguage: 'en',
+    mainEntity: { '@id': `${url}#itemlist` },
+  };
+}
+
+export function itemListNode(path: string, items: { name: string; path: string }[]) {
+  const url = absoluteUrl(path);
+  return {
+    '@type': 'ItemList',
+    '@id': `${url}#itemlist`,
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      url: absoluteUrl(item.path),
+    })),
   };
 }
 
@@ -66,30 +147,37 @@ export function articleNode(post: {
   tags: string[];
   cover: string;
 }) {
+  const root = canonicalRoot();
   return {
     '@type': 'Article',
-    '@id': `${SITE.url}/writing/${post.slug}#article`,
+    '@id': `${root}/writing/${post.slug}#article`,
     headline: post.title,
     description: post.summary,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt ?? post.publishedAt,
-    author: { '@id': `${SITE.url}/#person` },
-    publisher: { '@id': `${SITE.url}/work/atas#organization` },
-    mainEntityOfPage: `${SITE.url}/writing/${post.slug}`,
+    author: { '@id': `${root}/#person` },
+    publisher: { '@id': `${root}/work/atas#organization` },
+    mainEntityOfPage: { '@id': `${root}/writing/${post.slug}#webpage` },
+    isPartOf: { '@id': `${root}/#website` },
     keywords: post.tags.join(', '),
     image: absoluteUrl(post.cover),
+    articleSection: post.tags[0],
     inLanguage: 'en',
   };
 }
 
-export function creativeWorkNode(work: { name: string; slug: string; summary: string }) {
+export function creativeWorkNode(work: { name: string; slug: string; summary: string; cover: string }) {
+  const root = canonicalRoot();
   return {
     '@type': 'CreativeWork',
-    '@id': `${SITE.url}/work/${work.slug}#creativework`,
+    '@id': `${root}/work/${work.slug}#creativework`,
     name: work.name,
     description: work.summary,
-    url: `${SITE.url}/work/${work.slug}`,
-    creator: { '@id': `${SITE.url}/#person` },
+    url: `${root}/work/${work.slug}`,
+    creator: { '@id': `${root}/#person` },
+    image: absoluteUrl(work.cover),
+    mainEntityOfPage: { '@id': `${root}/work/${work.slug}#webpage` },
+    isPartOf: { '@id': `${root}/#website` },
     inLanguage: 'en',
   };
 }

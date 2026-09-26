@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import { AboutSection } from '@/features/identity/AboutSection';
 import { Hero } from '@/features/identity/Hero';
 import { ContactSection } from '@/features/contact/ContactSection';
-import { FocusSection } from '@/features/focus/FocusSection';
 import { VentureSpotlight } from '@/features/ventures/VentureSpotlight';
 import { WorkHighlights } from '@/features/ventures/WorkHighlights';
 import { WritingPreview } from '@/features/writing/WritingPreview';
@@ -25,11 +24,11 @@ export default function HomePage() {
     <Box>
       <Hero />
       <AboutSection />
-      <FocusSection />
+      {/* <FocusSection /> */}
       <VentureSpotlight />
       <WorkHighlights works={works} />
       <WritingPreview posts={posts} />
-      <ContactSection contactConfigured={Boolean(process.env.RESEND_API_KEY)} />
+      <ContactSection />
     </Box>
   );
 }

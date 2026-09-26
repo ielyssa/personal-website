@@ -5,7 +5,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 
 import { JsonLd } from '@/components/ui/json-ld';
 import { getNow } from '@/lib/content';
-import { breadcrumbNode, graph } from '@/lib/jsonld';
+import { breadcrumbNode, graph, webPageNode } from '@/lib/jsonld';
 import { buildMetadata } from '@/lib/seo';
 import { toDisplayDate } from '@/lib/utils/date';
 
@@ -22,7 +22,17 @@ export default function NowPage() {
 
   return (
     <Container sx={{ py: { xs: 6, md: 9 }, maxWidth: 'md' }}>
-      <JsonLd data={graph(breadcrumbNode([{ name: 'Home', path: '/' }, { name: 'Now', path: '/now' }]))} />
+      <JsonLd
+        data={graph(
+          webPageNode({
+            path: '/now',
+            name: 'Now',
+            description: 'What IRANKUNDA Elyssa is building right now.',
+            dateModified: now.updated,
+          }),
+          breadcrumbNode([{ name: 'Home', path: '/' }, { name: 'Now', path: '/now' }])
+        )}
+      />
       <Typography variant="overline" sx={{ color: 'primary.dark', fontWeight: 700, letterSpacing: 2 }}>
         Now
       </Typography>

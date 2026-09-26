@@ -3,7 +3,17 @@ import { describe, expect, it } from 'vitest';
 import { SITE } from '@content/site';
 
 import { absoluteUrl, buildMetadata } from '@/lib/seo';
-import { articleNode, breadcrumbNode, graph, organizationNode, personNode, websiteNode } from '@/lib/jsonld';
+import {
+  articleNode,
+  breadcrumbNode,
+  collectionPageNode,
+  graph,
+  itemListNode,
+  organizationNode,
+  personNode,
+  webPageNode,
+  websiteNode,
+} from '@/lib/jsonld';
 
 describe('seo metadata builder', () => {
   it('builds absolute canonical and og urls', () => {
@@ -18,6 +28,12 @@ describe('seo metadata builder', () => {
     const metadata = buildMetadata({ title: 'Home', description: 'Desc', path: '/' });
     const images = metadata.openGraph?.images as { url: string }[];
     expect(images[0].url).toBe('https://ielyssa.com/og/home.png');
+  });
+
+  it('maps collection routes to existing branded OG images', () => {
+    const metadata = buildMetadata({ title: 'Work', description: 'Desc', path: '/work' });
+    const images = metadata.openGraph?.images as { url: string }[];
+    expect(images[0].url).toBe('https://ielyssa.com/og/work-index.png');
   });
 
   it('sets article metadata with ISO times', () => {
@@ -64,6 +80,7 @@ describe('jsonld graph builders', () => {
     expect(person.sameAs).toContain('https://www.linkedin.com/in/ielyssa');
     expect(person.sameAs).toContain('https://x.com/_ielyssa');
     expect(person.jobTitle).toBe('Founder & CEO');
+    expect(person.image).toBe('https://ielyssa.com/media/person/elyssa-avatar-800.webp');
   });
 
   it('organization node reflects founding facts', () => {
@@ -74,6 +91,16 @@ describe('jsonld graph builders', () => {
 
   it('website node exists with publisher', () => {
     expect(websiteNode()['@type']).toBe('WebSite');
+  });
+
+  it('builds collection and page nodes with linked item lists', () => {
+    const collection = collectionPageNode({ path: '/writing', name: 'Writing', description: 'Notes.' });
+    const items = itemListNode('/writing', [{ name: 'Post', path: '/writing/post' }]);
+    const page = webPageNode({ path: '/contact', name: 'Contact', description: 'Get in touch.' });
+
+    expect(collection.mainEntity['@id']).toBe('https://ielyssa.com/writing#itemlist');
+    expect(items.itemListElement[0].url).toBe('https://ielyssa.com/writing/post');
+    expect(page['@id']).toBe('https://ielyssa.com/contact#webpage');
   });
 
   it('breadcrumb items are absolute', () => {

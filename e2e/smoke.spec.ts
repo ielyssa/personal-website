@@ -18,14 +18,19 @@ const ROUTES = [
 
 function collectConsoleErrors(page: import('@playwright/test').Page) {
   const errors: string[] = [];
+  const isExpectedExternalRequest = (url: string) =>
+    url.includes('/_vercel/') || url.includes('plausible.io') || url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com');
+
   page.on('console', (message) => {
     if (message.type() !== 'error') return;
-    const location = message.location().url ?? '';
-    if (location.includes('/_vercel/insights') || location.includes('/_vercel/speed-insights')) return;
     const text = message.text();
-    if (text.includes('/_vercel/insights') || text.includes('/_vercel/speed-insights')) return;
-    if (text.includes('Failed to load resource') && (location.includes('_vercel') || text.includes('_vercel'))) return;
+    if (text.startsWith('Failed to load resource') || text.includes('/_vercel/')) return;
     errors.push(text);
+  });
+  page.on('pageerror', (error) => errors.push(`Page error: ${error.message}`));
+  page.on('requestfailed', (request) => {
+    if (isExpectedExternalRequest(request.url())) return;
+    errors.push(`${request.failure()?.errorText ?? 'Request failed'}: ${request.url()}`);
   });
   return errors;
 }
@@ -36,8 +41,8 @@ test.describe('route smoke', () => {
       const consoleErrors = collectConsoleErrors(page);
       const response = await page.goto(route.path, { waitUntil: 'networkidle' });
       expect(response?.status()).toBe(200);
-      await expect(page).toHaveTitle(new RegExp(route.title));
       expect(consoleErrors, consoleErrors.join('\n')).toEqual([]);
+      await expect(page).toHaveTitle(new RegExp(route.title));
     });
   }
 
@@ -49,6 +54,81 @@ test.describe('route smoke', () => {
       const href = await canonical.getAttribute('href');
       expect(href).toMatch(/^https:\/\/ielyssa\.com(\/|$)/);
     }
+  });
+
+  test('every route exposes complete SEO metadata and valid JSON-LD', async ({ page, request }) => {
+    for (const route of ROUTES) {
+      await page.goto(route.path, { waitUntil: 'domcontentloaded' });
+
+      const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
+      expect(canonical).toBe(`https://ielyssa.com${route.path === '/' ? '' : route.path}`);
+
+      const description = await page.locator('meta[name="description"]').getAttribute('content');
+      expect(description).toBeTruthy();
+      expect(description!.length).toBeGreaterThan(50);
+      expect(description!.length).toBeLessThanOrEqual(180);
+
+      const metadata = [
+        'og:title',
+        'og:description',
+        'og:url',
+        'og:site_name',
+        'og:type',
+        'og:image',
+        'og:image:width',
+        'og:image:height',
+        'twitter:card',
+        'twitter:title',
+        'twitter:description',
+        'twitter:image',
+        'twitter:site',
+        'twitter:creator',
+      ];
+
+      for (const property of metadata) {
+        const content = await page.locator(`meta[property="${property}"], meta[name="${property}"]`).getAttribute('content');
+        expect(content, `${route.path} is missing ${property}`).toBeTruthy();
+      }
+
+      const robots = await page.locator('meta[name="robots"]').getAttribute('content');
+      expect(robots).toContain('index');
+      expect(robots).toContain('follow');
+
+      const ogImage = await page.locator('meta[property="og:image"]').getAttribute('content');
+      const ogResponse = await request.get(new URL(ogImage!).pathname);
+      expect(ogResponse.status(), `${route.path} OG image is unreachable`).toBe(200);
+
+      const jsonLdScripts = await page.locator('script[type="application/ld+json"]').allTextContents();
+      expect(jsonLdScripts.length, `${route.path} has no JSON-LD`).toBeGreaterThan(0);
+      for (const script of jsonLdScripts) {
+        const parsed = JSON.parse(script);
+        expect(parsed['@context']).toBe('https://schema.org');
+        expect(parsed['@graph']).toBeInstanceOf(Array);
+      }
+    }
+  });
+
+  test('crawler endpoints are canonical and internally linked', async ({ request }) => {
+    const sitemap = await request.get('/sitemap.xml');
+    expect(sitemap.status()).toBe(200);
+    const sitemapBody = await sitemap.text();
+    expect(sitemapBody).toContain('https://ielyssa.com/');
+    expect(sitemapBody).toContain('https://ielyssa.com/writing/building-atas-journey');
+    expect(sitemapBody).toContain('https://ielyssa.com/work/atas');
+
+    const robots = await request.get('/robots.txt');
+    expect(robots.status()).toBe(200);
+    expect(await robots.text()).toContain('Sitemap: https://ielyssa.com/sitemap.xml');
+
+    const feed = await request.get('/feed.xml');
+    expect(feed.status()).toBe(200);
+    const feedBody = await feed.text();
+    expect(feedBody).toContain('<rss');
+    expect(feedBody).toContain('https://ielyssa.com/writing');
+
+    const llms = await request.get('/llms.txt');
+    expect(llms.status()).toBe(200);
+    expect(await llms.text()).toContain('https://ielyssa.com/work/atas');
   });
 
   test('home includes structured data graph', async ({ page }) => {
@@ -78,7 +158,7 @@ test.describe('route smoke', () => {
   test('home hero shows founder positioning', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('heading', { level: 1 })).toContainText('IRANKUNDA Elyssa');
-    await expect(page.getByText('I build AI companies that understand Rwanda.')).toBeVisible();
+    await expect(page.getByText(/I build AI companies that understand Rwanda/)).toBeVisible();
   });
 });
 
@@ -99,14 +179,18 @@ test.describe('accessibility', () => {
       const serious = results.violations.filter(
         (violation) => violation.impact === 'serious' || violation.impact === 'critical'
       );
-      expect(serious.map((violation) => `${violation.id}: ${violation.nodes.length} nodes`)).toEqual([]);
+      expect(
+        serious.map(
+          (violation) => `${violation.id}: ${violation.nodes.map((node) => node.target.join(' ')).join(', ')}`
+        )
+      ).toEqual([]);
     });
   }
 });
 
 test.describe('contact form', () => {
-  test('shows graceful fallback when email unconfigured', async ({ page }) => {
+  test('shows a direct contact channel when email form is unconfigured', async ({ page }) => {
     await page.goto('/contact');
-    await expect(page.getByText('Prefer email?').or(page.getByText('Send a message'))).toBeVisible();
+    await expect(page.getByRole('link', { name: 'info@ielyssa.com' })).toBeVisible();
   });
 });

@@ -6,12 +6,9 @@ import { usePathname } from 'next/navigation';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MuiLink from '@mui/material/Link';
+import Fade from '@mui/material/Fade';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Zoom from '@mui/material/Zoom';
 
 import { Iconify } from '@/components/ui/iconify';
 import { FOOTER_LINKS, SOCIAL_PROFILES, isHomePathname } from '@/lib/nav';
@@ -35,73 +32,74 @@ export function Footer() {
 
   return (
     <>
-      <Box
-        component="footer"
-        sx={{
-          py: 5,
-          bgcolor: 'background.paper',
-          borderTop: 1,
-          borderColor: 'divider',
-        }}
-      >
+      <Box component="footer" sx={{ pt: { xs: 6, md: 8 }, pb: { xs: 4, md: 5 }, borderTop: '1px solid', borderColor: 'divider' }}>
         <Container>
           <Stack
             direction={{ xs: 'column', sm: 'row' }}
             justifyContent="space-between"
-            alignItems={{ xs: 'center', sm: 'flex-start' }}
-            spacing={3}
+            alignItems={{ xs: 'flex-start', sm: 'flex-end' }}
+            spacing={{ xs: 4, sm: 3 }}
+            sx={{ mb: { xs: 5, md: 6 } }}
           >
-            <Box sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>
+            <Box>
+              <Typography sx={{ fontWeight: 800, fontSize: '1.1rem', letterSpacing: '-0.01em', mb: 0.4 }}>
                 IRANKUNDA Elyssa
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Founder & CEO of ATAS · {`Kigali, Rwanda`}
+                {'Founder & CEO of ATAS · Kigali, Rwanda'}
               </Typography>
             </Box>
 
-            <Stack direction="row" spacing={{ xs: 2, sm: 3 }} flexWrap="wrap" justifyContent="center" useFlexGap>
-              {FOOTER_LINKS.map((link) => (
-                <MuiLink
-                  key={link.label}
-                  component={Link}
-                  href={link.href}
-                  underline="none"
-                  variant="body2"
-                  sx={{ color: 'text.secondary', '&:hover': { color: 'primary.main' } }}
-                >
-                  {link.label}
-                </MuiLink>
-              ))}
-            </Stack>
-
-            <Stack direction="row" spacing={0.5}>
+            <Stack direction="row" spacing={2.5}>
               {SOCIAL_PROFILES.map((social) => (
-                <IconButton
+                <Typography
                   key={social.label}
-                  size="small"
                   component="a"
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  sx={{ color: 'text.secondary', '&:hover': { color: 'primary.main' } }}
+                  sx={{ display: 'inline-flex', color: 'text.secondary', transition: 'color 200ms ease', '&:hover': { color: 'text.primary' } }}
                 >
-                  <Iconify icon={social.icon} width={20} />
-                </IconButton>
+                  <Iconify icon={social.icon} width={19} />
+                </Typography>
               ))}
             </Stack>
           </Stack>
 
-          <Divider sx={{ my: 3 }} />
+          <Stack
+            direction="row"
+            flexWrap="wrap"
+            useFlexGap
+            columnGap={{ xs: 3, sm: 4 }}
+            rowGap={1.2}
+            sx={{ pt: 3, pb: { xs: 4, md: 5 }, borderTop: '1px solid', borderColor: 'divider' }}
+          >
+            {FOOTER_LINKS.map((link) => (
+              <Typography
+                key={link.label}
+                component={Link}
+                href={link.href}
+                variant="body2"
+                sx={{
+                  color: 'text.secondary',
+                  textDecoration: 'none',
+                  transition: 'color 200ms ease',
+                  '&:hover': { color: 'text.primary' },
+                }}
+              >
+                {link.label}
+              </Typography>
+            ))}
+          </Stack>
 
-          <Typography variant="caption" color="text.secondary" sx={{ display: 'block', textAlign: 'center' }}>
-            {`© ${new Date().getFullYear()} IRANKUNDA Elyssa · Building AI that understands Rwanda`}
+          <Typography variant="body2" color="text.secondary">
+            {`© ${new Date().getFullYear()} IRANKUNDA Elyssa — Building AI that understands Rwanda`}
           </Typography>
         </Container>
       </Box>
 
-      <Zoom in={showTop && !home}>
+      <Fade in={showTop && !home}>
         <Box
           component="button"
           aria-label="Scroll back to top"
@@ -111,26 +109,25 @@ export function Footer() {
             right: { xs: 16, md: 24 },
             bottom: { xs: 16, md: 24 },
             zIndex: 1200,
-            width: 48,
-            height: 48,
+            width: 44,
+            height: 44,
             p: 0,
-            border: 'none',
-            borderRadius: '14px',
+            border: '1px solid',
+            borderColor: 'divider',
+            borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            color: 'primary.contrastText',
-            background: (th) => `linear-gradient(135deg, ${th.palette.primary.main}, ${th.palette.primary.dark})`,
-            boxShadow: (th) => th.customShadows.z12,
-            '&:hover': { transform: 'translateY(-3px)' },
-            transition: 'transform 200ms ease',
+            color: 'text.primary',
+            bgcolor: 'background.default',
+            transition: 'transform 200ms ease, border-color 200ms ease',
+            '&:hover': { transform: 'translateY(-3px)', borderColor: 'text.primary' },
           }}
         >
-          <Iconify icon="solar:arrow-up-bold" width={22} />
+          <Iconify icon="solar:arrow-up-bold" width={20} />
         </Box>
-      </Zoom>
+      </Fade>
     </>
   );
 }
-

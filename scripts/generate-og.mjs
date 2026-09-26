@@ -42,13 +42,13 @@ function baseSvg({ titleLines, subtitle, kicker, footer, compact }) {
   return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#042174"/>
-      <stop offset="52%" stop-color="#0C44AE"/>
-      <stop offset="100%" stop-color="#1877F2"/>
+      <stop offset="0%" stop-color="#000000"/>
+      <stop offset="52%" stop-color="#212121"/>
+      <stop offset="100%" stop-color="#424242"/>
     </linearGradient>
     <radialGradient id="glow" cx="82%" cy="18%" r="55%">
-      <stop offset="0%" stop-color="#8E33FF" stop-opacity="0.35"/>
-      <stop offset="100%" stop-color="#8E33FF" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
     </radialGradient>
     <clipPath id="circle"><circle cx="935" cy="315" r="205"/></clipPath>
   </defs>
@@ -142,6 +142,13 @@ const cards = [
     titleLines: ['Get in touch'],
     subtitle: 'Partnerships, speaking, collaboration.',
     footer: 'ielyssa.com/contact',
+  },
+  {
+    file: 'privacy',
+    kicker: 'Privacy',
+    titleLines: ['Privacy & data'],
+    subtitle: 'How ielyssa.com handles data and your choices.',
+    footer: 'ielyssa.com/privacy',
   },
 ];
 

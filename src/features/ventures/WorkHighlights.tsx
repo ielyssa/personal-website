@@ -3,24 +3,24 @@
 import Link from 'next/link';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActionArea from '@mui/material/CardActionArea';
-import Chip from '@mui/material/Chip';
-import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { SmartImage } from '@/components/media/SmartImage';
 import { Reveal } from '@/components/motion/Reveal';
 import { Section, SectionHeading } from '@/components/ui/section';
 import { Iconify } from '@/components/ui/iconify';
 import { trackEvent } from '@/lib/analytics';
 import type { Work } from '@/lib/content';
 
-const STATUS_COLOR = { active: 'success', research: 'info', earlier: 'default' } as const;
-
 const STATUS_LABEL = { active: 'Active product', research: 'Research program', earlier: 'Earlier work' } as const;
+
+const UNDERLINE_SX = {
+  backgroundImage: 'linear-gradient(currentColor, currentColor)',
+  backgroundSize: '0% 1px',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: '0 100%',
+  transition: 'background-size 380ms cubic-bezier(0.4, 0, 0.2, 1)',
+};
 
 export function WorkHighlights({ works }: { works: Work[] }) {
   const highlights = works.filter((work) => work.slug !== 'atas').slice(0, 3);
@@ -34,76 +34,125 @@ export function WorkHighlights({ works }: { works: Work[] }) {
           title="What I'm building"
           description="Selected ventures and research programs from ATAS."
         />
-        <Button
+        <Typography
           component={Link}
           href="/work"
-          endIcon={<Iconify icon="carbon:arrow-right" />}
-          sx={{ display: { xs: 'none', sm: 'inline-flex' }, flexShrink: 0 }}
+          onClick={() => trackEvent('work_index_open', { source: 'home' })}
+          sx={{
+            display: { xs: 'none', sm: 'inline-flex' },
+            alignItems: 'center',
+            gap: 0.75,
+            flexShrink: 0,
+            color: 'text.primary',
+            textDecoration: 'none',
+            fontWeight: 600,
+            ...UNDERLINE_SX,
+            '&:hover': { backgroundSize: '100% 1px' },
+          }}
         >
           All work
-        </Button>
+          <Iconify icon="carbon:arrow-right" width={16} />
+        </Typography>
       </Stack>
 
-      <Grid container spacing={{ xs: 2.5, md: 3 }}>
+      {/* A numbered ledger, not cards: each row treats status and period as
+          plain annotations rather than a colored badge, since this is
+          structured index content (like a table of contents) rather than a
+          browsable image gallery — a different job than the writing list. */}
+      <Stack divider={<Box sx={{ borderBottom: '1px solid', borderColor: 'divider' }} />}>
         {highlights.map((work, index) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={work.slug}>
-            <Reveal delay={index * 90}>
-              <Card
+          <Reveal key={work.slug} delay={index * 80}>
+            <Box
+              component={Link}
+              href={`/work/${work.slug}`}
+              onClick={() => trackEvent('venture_open', { venture: work.slug, source: 'home_work' })}
+              sx={{
+                display: 'block',
+                textDecoration: 'none',
+                color: 'inherit',
+                py: { xs: 3, md: 3.5 },
+                '&:hover .work-name': { backgroundSize: '100% 1px' },
+              }}
+            >
+              <Box
                 sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  overflow: 'hidden',
-                  transition: 'transform 280ms ease, box-shadow 280ms ease',
-                  '&:hover': { transform: 'translateY(-5px)', boxShadow: (th) => th.customShadows.z12 },
+                  display: 'grid',
+                  gridTemplateColumns: { xs: '2rem 1fr', md: '3rem 1fr 1fr auto' },
+                  columnGap: { xs: 2, md: 4 },
+                  rowGap: 0.8,
+                  alignItems: 'baseline',
                 }}
               >
-                <CardActionArea
-                  component={Link}
-                  href={`/work/${work.slug}`}
-                  onClick={() => trackEvent('venture_open', { venture: work.slug, source: 'home_work' })}
-                  sx={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', height: '100%' }}
+                <Typography
+                  color="text.secondary"
+                  sx={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600, gridRow: { xs: '1 / 3', md: 'auto' } }}
                 >
-                  <SmartImage
-                    src={work.cover}
-                    alt={`${work.name} — ${work.summary}`}
-                    aspect={16 / 10}
-                    sizes="(max-width: 600px) 100vw, (max-width: 1200px) 45vw, 30vw"
-                    sx={{ borderRadius: 0 }}
-                  />
-                  <Box sx={{ p: 2.4, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                    <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
-                      <Chip
-                        label={STATUS_LABEL[work.status]}
-                        size="small"
-                        color={STATUS_COLOR[work.status]}
-                        variant={work.status === 'earlier' ? 'outlined' : 'filled'}
-                      />
-                      <Typography variant="caption" color="text.secondary">
-                        {work.period}
-                      </Typography>
-                    </Stack>
-                    <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.6 }}>
-                      {work.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.65 }}>
-                      {work.summary}
-                    </Typography>
-                  </Box>
-                </CardActionArea>
-              </Card>
-            </Reveal>
-          </Grid>
-        ))}
-      </Grid>
+                  {work.number ?? String(index + 1).padStart(2, '0')}
+                </Typography>
 
-      <Box sx={{ mt: 3, display: { xs: 'block', sm: 'none' }, textAlign: 'center' }}>
-        <Button component={Link} href="/work" endIcon={<Iconify icon="carbon:arrow-right" />}>
+                <Typography
+                  className="work-name"
+                  sx={{
+                    fontWeight: 800,
+                    fontSize: { xs: '1.15rem', md: '1.3rem' },
+                    letterSpacing: '-0.01em',
+                    display: 'inline-block',
+                    gridColumn: { xs: '2', md: 'auto' },
+                    ...UNDERLINE_SX,
+                  }}
+                >
+                  {work.name}
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    gridColumn: { xs: '2', md: 'auto' },
+                    gridRow: { xs: 'auto', md: 'auto' },
+                  }}
+                >
+                  {work.summary}
+                </Typography>
+
+                <Stack
+                  sx={{
+                    gridColumn: { xs: '2', md: 'auto' },
+                    textAlign: { xs: 'left', md: 'right' },
+                  }}
+                >
+                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                    {STATUS_LABEL[work.status]}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {work.period}
+                  </Typography>
+                </Stack>
+              </Box>
+            </Box>
+          </Reveal>
+        ))}
+      </Stack>
+
+      <Box sx={{ mt: 3, display: { xs: 'block', sm: 'none' } }}>
+        <Typography
+          component={Link}
+          href="/work"
+          sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 0.75,
+            color: 'text.primary',
+            textDecoration: 'none',
+            fontWeight: 600,
+            ...UNDERLINE_SX,
+            '&:hover': { backgroundSize: '100% 1px' },
+          }}
+        >
           All work
-        </Button>
+          <Iconify icon="carbon:arrow-right" width={16} />
+        </Typography>
       </Box>
     </Section>
   );
 }
-
-

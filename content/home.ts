@@ -62,3 +62,6 @@ export const COLLABORATION_ITEMS = [
   'Kinyarwanda language technology projects',
   'Speaking invitations and mentorship',
 ] as const;
+
+export const CONTACT_INTRO =
+  "I read everything myself and reply within a few days. If it's urgent, email is fastest.";

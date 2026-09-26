@@ -12,6 +12,10 @@ function escapeXml(value: string) {
     .replaceAll("'", '&apos;');
 }
 
+function escapeCdata(value: string) {
+  return value.replaceAll(']]>', ']]]]><![CDATA[>');
+}
+
 export async function GET() {
   const posts = getPosts();
   const lastBuild = new Date().toUTCString();
@@ -23,6 +27,7 @@ export async function GET() {
       <link>${absoluteUrl(`/writing/${post.slug}`)}</link>
       <guid isPermaLink="true">${absoluteUrl(`/writing/${post.slug}`)}</guid>
       <description>${escapeXml(post.summary)}</description>
+      <content:encoded><![CDATA[${escapeCdata(post.summary)}]]></content:encoded>
       <pubDate>${new Date(post.publishedAt).toUTCString()}</pubDate>
       ${post.tags.map((tag) => `<category>${escapeXml(tag)}</category>`).join('\n      ')}
     </item>`
@@ -30,7 +35,7 @@ export async function GET() {
     .join('\n');
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>IRANKUNDA Elyssa — Writing</title>
     <link>${absoluteUrl('/writing')}</link>

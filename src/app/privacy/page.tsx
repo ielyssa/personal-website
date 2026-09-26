@@ -4,6 +4,8 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
 import { SITE } from '@content/site';
+import { JsonLd } from '@/components/ui/json-ld';
+import { breadcrumbNode, graph, webPageNode } from '@/lib/jsonld';
 import { buildMetadata } from '@/lib/seo';
 
 export const metadata = buildMetadata({
@@ -39,6 +41,16 @@ const SECTIONS = [
 export default function PrivacyPage() {
   return (
     <Container sx={{ py: { xs: 6, md: 9 }, maxWidth: 'md' }}>
+      <JsonLd
+        data={graph(
+          webPageNode({
+            path: '/privacy',
+            name: 'Privacy',
+            description: 'How ielyssa.com handles analytics, contact form data, and newsletter subscriptions.',
+          }),
+          breadcrumbNode([{ name: 'Home', path: '/' }, { name: 'Privacy', path: '/privacy' }])
+        )}
+      />
       <Typography variant="overline" sx={{ color: 'primary.dark', fontWeight: 700, letterSpacing: 2 }}>
         Legal
       </Typography>

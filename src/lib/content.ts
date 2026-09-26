@@ -35,6 +35,10 @@ export const workSchema = z.object({
       })
     )
     .default([]),
+
+  // New, optional:
+  role: z.string().min(1).optional(), // e.g. "Sole builder" or "Founder & lead"
+  number: z.string().min(1).optional(), // display index, e.g. "01" — falls back to array position if omitted
 });
 
 export const postSchema = z.object({

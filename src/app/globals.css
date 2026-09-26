@@ -25,16 +25,21 @@ body {
 }
 
 ::selection {
-  background-color: rgba(24, 119, 242, 0.24);
+  background-color: var(--mui-palette-primary-main);
+  color: var(--mui-palette-primary-contrastText);
 }
 
 :focus-visible {
-  outline: 2px solid #1877f2;
+  outline: 2px solid var(--mui-palette-primary-main);
   outline-offset: 3px;
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #1877f2, #8e33ff);
+  background: linear-gradient(
+    135deg,
+    var(--mui-palette-primary-main),
+    var(--mui-palette-secondary-main)
+  );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -83,7 +88,7 @@ body {
 }
 
 .prose a {
-  color: #0b63d8;
+  color: var(--mui-palette-primary-main);
   text-decoration: none;
   font-weight: 600;
 }
@@ -96,13 +101,13 @@ body {
   margin: 1.6em 0;
   padding: 0.4em 1.2em;
   border-left: 3px solid var(--mui-palette-primary-main);
-  background-color: rgba(145, 158, 171, 0.08);
+  background-color: var(--mui-palette-background-neutral);
   border-radius: 0 8px 8px 0;
 }
 
 .prose code {
   font-size: 0.9em;
-  background-color: rgba(145, 158, 171, 0.14);
+  background-color: var(--mui-palette-background-neutral);
   padding: 0.15em 0.4em;
   border-radius: 6px;
 }

@@ -1,5 +1,6 @@
 import { SITE } from '@content/site';
 import { getPosts, getWorks } from '@/lib/content';
+import { absoluteUrl } from '@/lib/seo';
 
 export const dynamic = 'force-static';
 
@@ -8,10 +9,10 @@ export async function GET() {
   const works = getWorks();
 
   const workLines = works
-    .map((work) => `  - [${work.name}](${SITE.url}/work/${work.slug}): ${work.summary}`)
+    .map((work) => `  - [${work.name}](${absoluteUrl(`/work/${work.slug}`)}): ${work.summary}`)
     .join('\n');
   const postLines = posts
-    .map((post) => `  - [${post.title}](${SITE.url}/writing/${post.slug}): ${post.summary}`)
+    .map((post) => `  - [${post.title}](${absoluteUrl(`/writing/${post.slug}`)}): ${post.summary}`)
     .join('\n');
 
   const body = `# ${SITE.name}
@@ -30,11 +31,11 @@ ${postLines}
 
 ## Key pages
 
-- [Home](${SITE.url}/): profile, mission, and contact paths
-- [Speaking](${SITE.url}/speaking): topics and media resources
-- [Press kit](${SITE.url}/press): bios, fact sheet, photos, downloads
-- [Now](${SITE.url}/now): current focus
-- [Contact](${SITE.url}/contact): direct channels
+- [Home](${absoluteUrl('/')}): profile, mission, and contact paths
+- [Speaking](${absoluteUrl('/speaking')}): topics and media resources
+- [Press kit](${absoluteUrl('/press')}): bios, fact sheet, photos, downloads
+- [Now](${absoluteUrl('/now')}): current focus
+- [Contact](${absoluteUrl('/contact')}): direct channels
 
 ## Contact
 

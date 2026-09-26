@@ -1,18 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { ContactForm } from '@/features/contact/ContactForm';
 import { Reveal } from '@/components/motion/Reveal';
 import { Section, SectionHeading } from '@/components/ui/section';
 import { Iconify } from '@/components/ui/iconify';
@@ -21,176 +12,152 @@ import { COLLABORATION_ITEMS } from '@content/home';
 import { trackEvent } from '@/lib/analytics';
 import { SOCIAL_PROFILES } from '@/lib/nav';
 
+const UNDERLINE_SX = {
+  backgroundImage: 'linear-gradient(currentColor, currentColor)',
+  backgroundSize: '0% 1px',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: '0 100%',
+  transition: 'background-size 380ms cubic-bezier(0.4, 0, 0.2, 1)',
+};
+
 const CHANNELS = [
   { icon: 'mdi:email', label: 'Email', value: SITE.email, href: `mailto:${SITE.email}` },
   { icon: 'mdi:phone', label: 'Phone', value: SITE.phone, href: SITE.phoneHref },
   { icon: 'mdi:map-marker', label: 'Location', value: SITE.location, href: null },
 ];
 
-export function ContactSection({ contactConfigured }: { contactConfigured: boolean }) {
-  const [newsletterEmail, setNewsletterEmail] = useState('');
-  const [newsletterDone, setNewsletterDone] = useState(false);
-  const newsletterUrl = process.env.NEXT_PUBLIC_BUTTONDOWN_URL;
-
+export function ContactSection() {
   return (
     <Section id="contact" neutral>
-      <SectionHeading
-        overline="Contact"
-        title="Let's build something that matters"
-        description="Partnerships, speaking invitations, collaboration with schools, or press — this is the fastest path."
-      />
-      <Grid container spacing={{ xs: 3, md: 4 }}>
-        <Grid size={{ xs: 12, md: 5 }}>
-          <Reveal>
-            <Card sx={{ p: { xs: 2.8, md: 3.4 }, height: '100%' }}>
-              <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
-                Direct channels
-              </Typography>
-              <Stack spacing={1.4}>
-                {CHANNELS.map((channel) => (
-                  <Stack
-                    key={channel.label}
-                    direction="row"
-                    spacing={1.4}
-                    alignItems="center"
-                    sx={{ p: 1.4, borderRadius: 1.8, border: 1, borderColor: 'divider', bgcolor: 'background.neutral' }}
-                  >
-                    <Box
+      <Box sx={{ mb: { xs: 6, md: 8 } }}>
+        <SectionHeading
+          overline="Contact"
+          title="Let's build something that matters"
+          description="Partnerships, speaking invitations, collaboration with schools, or press — email is the fastest way to reach me directly."
+        />
+      </Box>
+
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', md: '6fr 6fr' },
+          gap: { xs: 7, md: 10 },
+        }}
+      >
+        {/* Left — direct channels, the actual point of the section. Email
+            is set noticeably larger since it's the one action that matters. */}
+        <Reveal>
+          <Box>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+              Direct
+            </Typography>
+
+            <Typography
+              component="a"
+              href={CHANNELS[0].href!}
+              onClick={() => trackEvent('contact_channel_click', { channel: 'Email' })}
+              sx={{
+                display: 'inline-block',
+                fontSize: 'clamp(1.5rem, 3vw, 2.25rem)',
+                fontWeight: 800,
+                letterSpacing: '-0.015em',
+                color: 'text.primary',
+                textDecoration: 'none',
+                wordBreak: 'break-word',
+                mb: { xs: 4, md: 5 },
+                ...UNDERLINE_SX,
+                '&:hover': { backgroundSize: '100% 1px' },
+              }}
+            >
+              {SITE.email}
+            </Typography>
+
+            <Stack divider={<Box sx={{ borderBottom: '1px solid', borderColor: 'divider' }} />}>
+              {CHANNELS.slice(1).map((channel) => (
+                <Stack key={channel.label} direction="row" alignItems="center" spacing={2} sx={{ py: 1.8 }}>
+                  <Iconify icon={channel.icon} width={17} style={{ flexShrink: 0, opacity: 0.55 }} />
+                  {channel.href ? (
+                    <Typography
+                      component="a"
+                      href={channel.href}
+                      onClick={() => trackEvent('contact_channel_click', { channel: channel.label })}
                       sx={{
-                        width: 38,
-                        height: 38,
-                        borderRadius: 1.4,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        bgcolor: (th) => th.palette.primary.main,
-                        color: 'primary.contrastText',
-                        flexShrink: 0,
+                        display: 'inline-block',
+                        fontWeight: 700,
+                        color: 'text.primary',
+                        textDecoration: 'none',
+                        wordBreak: 'break-word',
+                        ...UNDERLINE_SX,
+                        '&:hover': { backgroundSize: '100% 1px' },
                       }}
                     >
-                      <Iconify icon={channel.icon} width={19} />
-                    </Box>
-                    <Box sx={{ minWidth: 0 }}>
-                      <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
-                        {channel.label}
-                      </Typography>
-                      {channel.href ? (
-                        <Typography
-                          component="a"
-                          href={channel.href}
-                          variant="subtitle2"
-                          onClick={() => trackEvent('contact_channel_click', { channel: channel.label })}
-                          sx={{ color: 'text.primary', textDecoration: 'none', '&:hover': { color: 'primary.dark' }, wordBreak: 'break-word' }}
-                        >
-                          {channel.value}
-                        </Typography>
-                      ) : (
-                        <Typography variant="subtitle2">{channel.value}</Typography>
-                      )}
-                    </Box>
-                  </Stack>
-                ))}
-              </Stack>
-
-              <Divider sx={{ my: 2.6 }} />
-
-              <Typography variant="h6" sx={{ fontWeight: 700, mb: 1.6 }}>
-                Open to
-              </Typography>
-              <Stack spacing={1.1} sx={{ mb: 2.6 }}>
-                {COLLABORATION_ITEMS.map((item) => (
-                  <Stack key={item} direction="row" spacing={1} alignItems="flex-start">
-                    <Iconify icon="carbon:checkmark-filled" width={17} sx={{ color: 'primary.dark', mt: '3px' }} />
-                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.65 }}>
-                      {item}
-                    </Typography>
-                  </Stack>
-                ))}
-              </Stack>
-
-              <Stack direction="row" spacing={1} justifyContent={{ xs: 'center', sm: 'flex-start' }}>
-                {SOCIAL_PROFILES.map((social) => (
-                  <IconButton
-                    key={social.label}
-                    component="a"
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={social.label}
-                    onClick={() => trackEvent('social_click', { platform: social.label, location: 'contact' })}
-                    sx={{
-                      width: 44,
-                      height: 44,
-                      color: 'text.secondary',
-                      bgcolor: 'background.neutral',
-                      '&:hover': { color: 'primary.dark', transform: 'translateY(-2px)' },
-                      transition: 'color 200ms ease, transform 200ms ease',
-                    }}
-                  >
-                    <Iconify icon={social.icon} width={21} />
-                  </IconButton>
-                ))}
-              </Stack>
-            </Card>
-          </Reveal>
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 7 }}>
-          <Stack spacing={3} sx={{ height: '100%' }}>
-            <Reveal delay={100}>
-              <ContactForm configured={contactConfigured} />
-            </Reveal>
-
-            {newsletterUrl ? (
-              <Reveal delay={160}>
-                <Card sx={{ p: { xs: 2.8, md: 3.2 } }}>
-                  {newsletterDone ? (
-                    <Typography variant="body2" color="text.secondary">
-                      Thanks — check your inbox to confirm the subscription.
+                      {channel.value}
                     </Typography>
                   ) : (
-                    <form
-                      action={newsletterUrl}
-                      method="post"
-                      target="_blank"
-                      onSubmit={() => {
-                        setNewsletterDone(true);
-                        trackEvent('newsletter_signup', { location: 'contact' });
-                      }}
-                    >
-                      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} alignItems={{ sm: 'center' }}>
-                        <Box sx={{ flexGrow: 1 }}>
-                          <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-                            {"Occasional updates"}
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            {"What I'm building and writing. No spam."}
-                          </Typography>
-                        </Box>
-                        <TextField
-                          size="small"
-                          type="email"
-                          name="email"
-                          required
-                          placeholder="you@example.com"
-                          value={newsletterEmail}
-                          onChange={(event) => setNewsletterEmail(event.target.value)}
-                          aria-label="Email address for updates"
-                          sx={{ minWidth: { sm: 240 } }}
-                        />
-                        <Button type="submit" variant="outlined">
-                          Subscribe
-                        </Button>
-                      </Stack>
-                    </form>
+                    <Typography sx={{ fontWeight: 700 }}>{channel.value}</Typography>
                   )}
-                </Card>
-              </Reveal>
-            ) : null}
-          </Stack>
-        </Grid>
-      </Grid>
+                </Stack>
+              ))}
+            </Stack>
+          </Box>
+        </Reveal>
+
+        {/* Right — what I'm open to, plus socials. Real content, not a
+            sidebar filler: gives the second column its own reason to exist. */}
+        <Reveal delay={100}>
+          <Box
+            sx={{
+              pl: { md: 6 },
+              borderLeft: { md: '1px solid' },
+              borderColor: { md: 'divider' },
+            }}
+          >
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+              Open to
+            </Typography>
+
+            <Stack
+              divider={<Box sx={{ borderBottom: '1px solid', borderColor: 'divider' }} />}
+              sx={{ mb: { xs: 5, md: 6 } }}
+            >
+              {COLLABORATION_ITEMS.map((item) => (
+                <Typography
+                  key={item}
+                  variant="body1"
+                  sx={{ py: 1.8, lineHeight: 1.6, maxWidth: '42ch' }}
+                >
+                  {item}
+                </Typography>
+              ))}
+            </Stack>
+
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Elsewhere
+            </Typography>
+            <Stack direction="row" spacing={3}>
+              {SOCIAL_PROFILES.map((social) => (
+                <Typography
+                  key={social.label}
+                  component="a"
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  onClick={() => trackEvent('social_click', { platform: social.label, location: 'contact' })}
+                  sx={{
+                    display: 'inline-flex',
+                    color: 'text.secondary',
+                    transition: 'color 200ms ease',
+                    '&:hover': { color: 'text.primary' },
+                  }}
+                >
+                  <Iconify icon={social.icon} width={20} />
+                </Typography>
+              ))}
+            </Stack>
+          </Box>
+        </Reveal>
+      </Box>
     </Section>
   );
 }
-

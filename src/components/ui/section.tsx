@@ -59,7 +59,7 @@ export function Section({
         {
           py: { xs: 7, md: 11 },
           scrollMarginTop: '88px',
-          ...(neutral && { bgcolor: 'background.neutral' }),
+          ...(neutral && { bgcolor: 'background.default' }),
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}

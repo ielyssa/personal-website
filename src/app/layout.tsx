@@ -20,13 +20,22 @@ const dmSans = DM_Sans({
   variable: '--font-dm-sans',
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? SITE.url;
+
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE.url),
+  metadataBase: new URL(siteUrl),
   ...buildMetadata({
     title: `${SITE.name} — ${SITE.roleLine}`,
     description: `${SITE.positioningLine} Founder of ATAS, building Rwanda-first AI infrastructure: AcademiaPlus in schools today, IMIZI as long-term research.`,
     path: '/',
   }),
+  applicationName: SITE.name,
+  authors: [{ name: SITE.name, url: siteUrl }],
+  creator: SITE.name,
+  publisher: SITE.name,
+  category: 'technology',
+  referrer: 'strict-origin-when-cross-origin',
+  formatDetection: { email: false, address: false, telephone: false },
   manifest: '/site.webmanifest',
   icons: {
     icon: [
@@ -48,8 +57,8 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#F9FAFB' },
-    { media: '(prefers-color-scheme: dark)', color: '#0C0F14' },
+    { media: '(prefers-color-scheme: light)', color: '#FAFAFA' },
+    { media: '(prefers-color-scheme: dark)', color: '#000000' },
   ],
 };
 
@@ -69,10 +78,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Analytics />
         <SpeedInsights />
         {plausibleDomain ? (
-          <Script defer data-domain={plausibleDomain} src="https://plausible.io/js/script.js" strategy="lazyOnload" />
+          <Script
+            defer
+            data-domain={plausibleDomain}
+            src="https://plausible.io/js/script.js"
+            strategy="lazyOnload"
+          />
         ) : null}
       </body>
     </html>
   );
 }
-
