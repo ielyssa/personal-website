@@ -224,7 +224,7 @@ export function WritingIndexClient({ posts }: { posts: Post[] }) {
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', sm: '340px 1fr' },
+            gridTemplateColumns: { xs: '1fr', sm: '420px 1fr' },
             gap: { xs: 2.5, sm: 4 },
             alignItems: 'center',
           }}
