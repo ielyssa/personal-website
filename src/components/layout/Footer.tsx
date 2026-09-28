@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -11,11 +10,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { Iconify } from '@/components/ui/iconify';
-import { FOOTER_LINKS, SOCIAL_PROFILES, isHomePathname } from '@/lib/nav';
+import { FOOTER_LINKS, SOCIAL_PROFILES } from '@/lib/nav';
 
 export function Footer() {
-  const pathname = usePathname();
-  const home = isHomePathname(pathname);
   const [showTop, setShowTop] = useState(false);
 
   useEffect(() => {
@@ -114,7 +111,7 @@ export function Footer() {
         </Container>
       </Box>
 
-      <Fade in={showTop && !home}>
+      <Fade in={showTop}>
         <Box
           component="button"
           aria-label="Scroll back to top"

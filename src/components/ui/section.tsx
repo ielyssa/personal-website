@@ -66,7 +66,10 @@ export function Section({
       sx={[
         {
           py: { xs: 7, md: 11 },
-          scrollMarginTop: '88px',
+          // The section's own top padding already creates breathing room below
+          // the fixed header. A large scroll margin here would add that space
+          // twice whenever a header anchor is clicked.
+          scrollMarginTop: { xs: '8px', md: '16px' },
           ...(neutral && { bgcolor: 'background.default' }),
         },
         ...(Array.isArray(sx) ? sx : [sx]),
