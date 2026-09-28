@@ -3,8 +3,8 @@ import Script from 'next/script';
 
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { DM_Sans } from 'next/font/google';
 
+import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics';
 import { SiteChrome } from '@/components/layout/SiteChrome';
 import { JsonLd } from '@/components/ui/json-ld';
 import { SITE } from '@content/site';
@@ -13,12 +13,6 @@ import { buildMetadata } from '@/lib/seo';
 import { ThemeRegistry } from '@/theme/ThemeRegistry';
 
 import './globals.css';
-
-const dmSans = DM_Sans({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-dm-sans',
-});
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? SITE.url;
 
@@ -63,18 +57,37 @@ export const viewport: Viewport = {
 };
 
 const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.match(/^G-[A-Z0-9]+$/i)?.[0];
 
 const colorSchemeScript = `(function(){try{var t=localStorage.getItem('mui-mode');var d=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;var m=t==='light'||t==='dark'?t:(d?'dark':'light');if(m==='dark'){document.documentElement.setAttribute('data-theme','dark');}else{document.documentElement.removeAttribute('data-theme');}}catch(e){}})();`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className={dmSans.variable}>
+    <html lang="en" suppressHydrationWarning>
       <body>
         <script dangerouslySetInnerHTML={{ __html: colorSchemeScript }} />
         <ThemeRegistry>
           <SiteChrome>{children}</SiteChrome>
         </ThemeRegistry>
         <JsonLd data={graph(websiteNode(), profilePageNode(), personNode(), organizationNode())} />
+        {gaMeasurementId ? (
+          <>
+            <Script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gaMeasurementId}', { send_page_view: true });
+              `}
+            </Script>
+            <GoogleAnalytics measurementId={gaMeasurementId} />
+          </>
+        ) : null}
         <Analytics />
         <SpeedInsights />
         {plausibleDomain ? (

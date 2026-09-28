@@ -13,10 +13,10 @@ Production Next.js 15 (App Router) website — statically rendered, content-driv
 | UI | MUI v7 + Emotion (CSS variables, light/dark via `data-theme`, no-flash init script) |
 | Content | MDX collections in `content/` with zod-validated frontmatter |
 | Media | `sharp` master pipeline → WebP + blur placeholders → `next/image` (AVIF/WebP) |
-| Fonts | DM Sans Variable via `next/font` (single family, preloaded) |
+| Fonts | Build-local DM Sans/system fallback stack (no font CDN required at build time) |
 | Icons | 19 icons embedded offline (zero runtime requests) |
-| Email | Resend (contact form, env-gated) · Buttondown (newsletter, env-gated) |
-| Analytics | Vercel Analytics + Speed Insights; Plausible behind `trackEvent` facade (env-gated) |
+| Contact | Direct email, phone, and location links |
+| Analytics | Google Analytics 4 (env-gated) + Vercel Analytics/Speed Insights; Plausible remains available through the event facade |
 | Testing | Vitest (content + SEO gates) · Playwright (smoke + axe a11y) · Lighthouse CI budgets |
 | CI | GitHub Actions — lint → typecheck → unit → build → e2e |
 
@@ -48,9 +48,10 @@ The short version: **content lives in `content/` and needs no code changes**; th
 ## Routes
 
 ```
-/                      Home (hero, about, focus, ATAS spotlight, work, writing, contact)
+/                      Home (hero, about, ATAS spotlight, work, writing, contact)
 /work                  Venture index        /work/[slug]        Venture detail
 /writing               Writing index        /writing/[slug]     Post detail
+/biography             Founder biography and people directory
 /speaking              Speaking topics      /press              Press kit
 /now                   Current focus        /contact            Contact
 /privacy               Privacy              /feed.xml           RSS
@@ -67,18 +68,18 @@ Copy `.env.example` → `.env.local`. Everything except the site URL is optional
 | Variable | Purpose |
 |---|---|
 | `NEXT_PUBLIC_SITE_URL` | Canonical origin (defaults to `https://ielyssa.com`) |
-| `RESEND_API_KEY` | Enables the contact form (without it: mailto fallback) |
-| `CONTACT_FROM` / `CONTACT_TO_EMAIL` | Email routing overrides |
-| `NEXT_PUBLIC_BUTTONDOWN_URL` | Enables the newsletter block |
 | `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | Enables Plausible custom-event analytics |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Enables Google Analytics 4 (`G-...`) pageviews and events |
 
 ## Project structure
 
 ```
 content/            # single source of truth for identity + all content (edit here first)
+  biography.ts       # founder biography chapters and structured story content
+  bio-people.ts      # people named in the biography and their verified links
   originals/        # source images (never served directly)
 src/
-  app/              # routes, metadata, sitemap/robots/feed/llms, api/contact
+  app/              # routes, metadata, sitemap/robots/feed/llms
   features/         # page sections grouped by domain (identity, ventures, writing, …)
   components/       # design-system: ui/, media/ (SmartImage, Carousel), layout/, motion/
   lib/              # content loaders (zod), SEO/JSON-LD builders, analytics, nav, media manifest

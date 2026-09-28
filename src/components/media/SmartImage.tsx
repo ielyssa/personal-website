@@ -15,7 +15,16 @@ type SmartImageProps = {
   sx?: object;
 };
 
-export function SmartImage({ src, alt, sizes, priority = false, aspect, fill = false, quality, sx }: SmartImageProps) {
+export function SmartImage({
+  src,
+  alt,
+  sizes,
+  priority = false,
+  aspect,
+  fill = false,
+  quality,
+  sx,
+}: SmartImageProps) {
   const entry = getMediaEntry(src);
 
   if (!entry) {
@@ -90,4 +99,3 @@ export function SmartImage({ src, alt, sizes, priority = false, aspect, fill = f
     </Box>
   );
 }
-

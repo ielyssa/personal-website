@@ -82,12 +82,15 @@ export function Header() {
       setActiveSection(null);
       return undefined;
     }
-    const sectionIds = ['about', 'focus', 'atas', 'contact'];
+    const sectionIds = ['about', 'atas', 'contact'];
+    const visibility = new Map<string, IntersectionObserverEntry>();
     const observer = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) setActiveSection(entry.target.id);
-        }
+        for (const entry of entries) visibility.set(entry.target.id, entry);
+        const active = [...visibility.values()]
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        setActiveSection(active?.target.id ?? null);
       },
       { rootMargin: '-35% 0px -55% 0px' }
     );
@@ -100,7 +103,8 @@ export function Header() {
 
   const isActive = (item: (typeof NAV_ITEMS)[number]) => {
     if (item.kind === 'route') {
-      return item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+      if (item.href === '/') return pathname === '/' && activeSection === null;
+      return pathname === item.href || pathname.startsWith(`${item.href}/`);
     }
     return home && activeSection === item.href.replace('/#', '');
   };
@@ -140,7 +144,11 @@ export function Header() {
         ))}
       </Stack>
 
-      <Stack direction="row" spacing={2.5} sx={{ mt: 'auto', pt: 4, borderTop: '1px solid', borderColor: 'divider' }}>
+      <Stack
+        direction="row"
+        spacing={2.5}
+        sx={{ mt: 'auto', pt: 4, borderTop: '1px solid', borderColor: 'divider' }}
+      >
         {SOCIAL_PROFILES.map((social) => (
           <Typography
             key={social.label}
@@ -149,7 +157,11 @@ export function Header() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={social.label}
-            sx={{ display: 'inline-flex', color: 'text.secondary', '&:hover': { color: 'text.primary' } }}
+            sx={{
+              display: 'inline-flex',
+              color: 'text.secondary',
+              '&:hover': { color: 'text.primary' },
+            }}
           >
             <Iconify icon={social.icon} width={20} />
           </Typography>
@@ -250,7 +262,9 @@ export function Header() {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         sx={{ display: { xs: 'block', lg: 'none' } }}
-        slotProps={{ paper: { sx: { width: { xs: '100%', sm: 340 }, bgcolor: 'background.default' } } }}
+        slotProps={{
+          paper: { sx: { width: { xs: '100%', sm: 340 }, bgcolor: 'background.default' } },
+        }}
       >
         {drawer}
       </Drawer>

@@ -5,6 +5,8 @@ import { SITE } from '@content/site';
 import { absoluteUrl, buildMetadata } from '@/lib/seo';
 import {
   articleNode,
+  biographyPageNode,
+  biographyPersonNode,
   breadcrumbNode,
   collectionPageNode,
   graph,
@@ -34,6 +36,18 @@ describe('seo metadata builder', () => {
     const metadata = buildMetadata({ title: 'Work', description: 'Desc', path: '/work' });
     const images = metadata.openGraph?.images as { url: string }[];
     expect(images[0].url).toBe('https://ielyssa.com/og/work-index.png');
+  });
+
+  it('maps the biography route to its dedicated OG image and keywords', () => {
+    const metadata = buildMetadata({
+      title: 'Biography',
+      description: 'A biography page with a complete personal history.',
+      path: '/biography',
+      keywords: ['IRANKUNDA Elyssa biography'],
+    });
+    const images = metadata.openGraph?.images as { url: string }[];
+    expect(images[0].url).toBe('https://ielyssa.com/og/biography.png');
+    expect(metadata.keywords).toContain('IRANKUNDA Elyssa biography');
   });
 
   it('sets article metadata with ISO times', () => {
@@ -101,6 +115,25 @@ describe('jsonld graph builders', () => {
     expect(collection.mainEntity['@id']).toBe('https://ielyssa.com/writing#itemlist');
     expect(items.itemListElement[0].url).toBe('https://ielyssa.com/writing/post');
     expect(page['@id']).toBe('https://ielyssa.com/contact#webpage');
+  });
+
+  it('builds a biography graph with named people as entities', () => {
+    const page = biographyPageNode({
+      description: 'Biography.',
+      keywords: ['biography'],
+      people: [{ slug: 'hagenimana-samuel' }],
+    });
+    const person = biographyPersonNode({
+      slug: 'hagenimana-samuel',
+      name: 'HAGENIMANA Samuel',
+      context: 'A close friend and collaborator.',
+      website: 'https://hagenimanasamuel.pages.dev/',
+    });
+
+    expect(page['@type']).toEqual(['ProfilePage', 'WebPage']);
+    expect(page.mentions[0]['@id']).toBe('https://ielyssa.com/biography#person-hagenimana-samuel');
+    expect(person['@type']).toBe('Person');
+    expect(person.sameAs).toContain('https://hagenimanasamuel.pages.dev/');
   });
 
   it('breadcrumb items are absolute', () => {

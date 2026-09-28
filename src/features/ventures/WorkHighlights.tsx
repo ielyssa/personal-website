@@ -12,7 +12,11 @@ import { Iconify } from '@/components/ui/iconify';
 import { trackEvent } from '@/lib/analytics';
 import type { Work } from '@/lib/content';
 
-const STATUS_LABEL = { active: 'Active product', research: 'Research program', earlier: 'Earlier work' } as const;
+const STATUS_LABEL = {
+  active: 'Active product',
+  research: 'Research program',
+  earlier: 'Earlier work',
+} as const;
 
 const UNDERLINE_SX = {
   backgroundImage: 'linear-gradient(currentColor, currentColor)',
@@ -27,7 +31,12 @@ export function WorkHighlights({ works }: { works: Work[] }) {
 
   return (
     <Section id="work">
-      <Stack direction="row" justifyContent="space-between" alignItems="flex-end" sx={{ mb: { xs: 4, md: 6 } }}>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="flex-end"
+        sx={{ mb: { xs: 4, md: 6 } }}
+      >
         <SectionHeading
           align="left"
           overline="Work"
@@ -65,7 +74,9 @@ export function WorkHighlights({ works }: { works: Work[] }) {
             <Box
               component={Link}
               href={`/work/${work.slug}`}
-              onClick={() => trackEvent('venture_open', { venture: work.slug, source: 'home_work' })}
+              onClick={() =>
+                trackEvent('venture_open', { venture: work.slug, source: 'home_work' })
+              }
               sx={{
                 display: 'block',
                 textDecoration: 'none',
@@ -85,7 +96,11 @@ export function WorkHighlights({ works }: { works: Work[] }) {
               >
                 <Typography
                   color="text.secondary"
-                  sx={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600, gridRow: { xs: '1 / 3', md: 'auto' } }}
+                  sx={{
+                    fontVariantNumeric: 'tabular-nums',
+                    fontWeight: 600,
+                    gridRow: { xs: '1 / 3', md: 'auto' },
+                  }}
                 >
                   {work.number ?? String(index + 1).padStart(2, '0')}
                 </Typography>

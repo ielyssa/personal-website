@@ -1,3 +1,16 @@
+### Unreleased
+
+- [New] Add the `/biography` route with a long-form founder story, named-people directory, internal name anchors, and Biography navigation.
+- [New] Add biography-specific metadata, ProfilePage/Person/ItemList JSON-LD, sitemap and `llms.txt` coverage, and a dedicated OG card.
+- [Fixed] Ensure only one header item is marked active at a time while scrolling the home page.
+- [Fixed] Replace the obsolete `gray-matter` YAML bridge with the supported `js-yaml` loader so static generation works with the locked dependency graph.
+- [Changed] Add env-gated Google Analytics 4 pageviews/events while retaining Vercel Speed Insights and aggregate Web Analytics.
+- [Changed] Remove build-time Google Font fetching; typography now uses the local DM Sans/system fallback stack.
+- [Removed] Remove the unused Resend contact API and Buttondown newsletter configuration; contact now uses direct links only.
+- [Changed] Document biography editing, entity SEO, navigation registration, and production verification requirements.
+
+---
+
 ### v4.0.0
 
 ###### Aug 25, 2026
@@ -13,7 +26,7 @@
 - [New] Contact form (Resend, env-gated with mailto fallback), newsletter capture (Buttondown, env-gated).
 - [New] Analytics: Vercel Analytics + Speed Insights + Plausible facade behind one `trackEvent` API.
 - [New] Quality engineering: Vitest unit suite (content + SEO gates), Playwright e2e smoke + axe scans, GitHub Actions CI, Lighthouse CI budgets, security headers + CSP report-only.
-- [Changed] Single font family (DM Sans Variable via `next/font`); Barlow removed.
+- [Changed] Single font family (DM Sans/system fallback stack); Barlow removed.
 - [Changed] Dark mode systemized with no-flash inline script and `data-theme` CSS variables.
 - [Removed] Vite, react-router, apexcharts, simplebar, es-toolkit, dead components; duplicate lockfiles (now pnpm-only).
 

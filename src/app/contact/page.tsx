@@ -21,14 +21,17 @@ export default function ContactPage() {
           webPageNode({
             path: '/contact',
             name: 'Contact',
-            description: 'Contact IRANKUNDA Elyssa for partnerships, speaking, education, and press inquiries.',
+            description:
+              'Contact IRANKUNDA Elyssa for partnerships, speaking, education, and press inquiries.',
             type: 'ContactPage',
           }),
-          breadcrumbNode([{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact' }])
+          breadcrumbNode([
+            { name: 'Home', path: '/' },
+            { name: 'Contact', path: '/contact' },
+          ])
         )}
       />
       <ContactSection />
     </Box>
   );
 }
-

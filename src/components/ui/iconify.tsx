@@ -37,5 +37,3 @@ export function Iconify({ className, icon, width = 20, height, sx, ...other }: I
 }
 
 const IconRoot = styled(Icon)``;
-
-

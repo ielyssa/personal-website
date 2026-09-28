@@ -9,10 +9,18 @@ type SectionHeadingProps = {
   align?: 'center' | 'left';
 };
 
-export function SectionHeading({ overline, title, description, align = 'center' }: SectionHeadingProps) {
+export function SectionHeading({
+  overline,
+  title,
+  description,
+  align = 'center',
+}: SectionHeadingProps) {
   return (
     <Box sx={{ mb: { xs: 4, md: 6 }, textAlign: align }}>
-      <Typography variant="overline" sx={{ color: 'primary.dark', fontWeight: 700, letterSpacing: 2 }}>
+      <Typography
+        variant="overline"
+        sx={{ color: 'primary.dark', fontWeight: 700, letterSpacing: 2 }}
+      >
         {overline}
       </Typography>
       <Typography
@@ -68,4 +76,3 @@ export function Section({
     </Box>
   );
 }
-

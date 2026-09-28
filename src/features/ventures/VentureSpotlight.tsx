@@ -86,19 +86,31 @@ export function VentureSpotlight() {
             gradient wash. */}
         <Reveal>
           <Box>
-            <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.8, mb: { xs: 4, md: 5 }, maxWidth: '46ch' }}>
-              I founded ATAS in Kigali to build AI systems that genuinely understand Rwanda — its languages,
-              geography, culture, and the way Rwandans actually live, work, and communicate. We run research
-              and product as one pipeline.
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              sx={{ lineHeight: 1.8, mb: { xs: 4, md: 5 }, maxWidth: '46ch' }}
+            >
+              I founded ATAS in Kigali to build AI systems that genuinely understand Rwanda — its
+              languages, geography, culture, and the way Rwandans actually live, work, and
+              communicate. We run research and product as one pipeline.
             </Typography>
 
-            <Stack divider={<Box sx={{ borderBottom: '1px solid', borderColor: 'divider' }} />} sx={{ mb: { xs: 4, md: 5 } }}>
+            <Stack
+              divider={<Box sx={{ borderBottom: '1px solid', borderColor: 'divider' }} />}
+              sx={{ mb: { xs: 4, md: 5 } }}
+            >
               {PROGRAMS.map((program) => (
                 <Box
                   key={program.name}
                   component={Link}
                   href={program.href}
-                  onClick={() => trackEvent('venture_open', { venture: program.name.toLowerCase(), source: 'home_spotlight' })}
+                  onClick={() =>
+                    trackEvent('venture_open', {
+                      venture: program.name.toLowerCase(),
+                      source: 'home_spotlight',
+                    })
+                  }
                   sx={{
                     display: 'block',
                     py: 2.2,
@@ -107,14 +119,29 @@ export function VentureSpotlight() {
                     '&:hover .program-name': { backgroundSize: '100% 1px' },
                   }}
                 >
-                  <Stack direction="row" justifyContent="space-between" alignItems="baseline" spacing={2} sx={{ mb: 0.5 }}>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="baseline"
+                    spacing={2}
+                    sx={{ mb: 0.5 }}
+                  >
                     <Typography
                       className="program-name"
-                      sx={{ fontWeight: 800, fontSize: '1.1rem', display: 'inline-block', ...UNDERLINE_SX }}
+                      sx={{
+                        fontWeight: 800,
+                        fontSize: '1.1rem',
+                        display: 'inline-block',
+                        ...UNDERLINE_SX,
+                      }}
                     >
                       {program.name}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ flexShrink: 0, whiteSpace: 'nowrap' }}>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ flexShrink: 0, whiteSpace: 'nowrap' }}
+                    >
                       {program.status}
                     </Typography>
                   </Stack>
@@ -128,7 +155,9 @@ export function VentureSpotlight() {
             <Typography
               component={Link}
               href="/work/atas"
-              onClick={() => trackEvent('venture_open', { venture: 'atas', source: 'home_spotlight' })}
+              onClick={() =>
+                trackEvent('venture_open', { venture: 'atas', source: 'home_spotlight' })
+              }
               sx={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -150,7 +179,7 @@ export function VentureSpotlight() {
         {/* Right — the slide viewer, framed by a hairline rather than
             floating with drop shadows. */}
         <Reveal delay={120}>
-          <ProjectSlides slides={SLIDES} aspect={16 / 12} />
+          <ProjectSlides slides={SLIDES} aspect={16 / 9} />
         </Reveal>
       </Box>
     </Section>

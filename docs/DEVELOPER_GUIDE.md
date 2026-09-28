@@ -2,7 +2,7 @@
 
 The complete reference for working on this project. Read [README.md](../README.md) first for the 1-minute overview; this document is the deep dive.
 
-**Last verified:** 2026-08-25 against v4.0.0 (Next.js 15.5, MUI 7.3, React 19).
+**Last verified:** 2026-09-28 against v4.0.0 (Next.js 15.5, MUI 7.3, React 19).
 
 ---
 
@@ -19,10 +19,11 @@ The complete reference for working on this project. Read [README.md](../README.m
    - 3.6 Change site-wide design (colors, fonts, spacing)
    - 3.7 Add a new page
    - 3.8 Edit the home page sections
-   - 3.9 Update speaking engagements
-   - 3.10 Update the press kit
-   - 3.11 Regenerate social-share (OG) images
-   - 3.12 Change navigation or footer links
+   - 3.9 Edit the biography
+   - 3.10 Update speaking engagements
+   - 3.11 Update the press kit
+   - 3.12 Regenerate social-share (OG) images
+   - 3.13 Change navigation or footer links
 4. [Architecture reference](#4-architecture-reference)
    - 4.1 Rendering model & the server/client boundary
    - 4.2 Content pipeline (frontmatter → zod → pages)
@@ -31,7 +32,7 @@ The complete reference for working on this project. Read [README.md](../README.m
    - 4.5 Theme & styling rules
    - 4.6 Icons
    - 4.7 Analytics
-   - 4.8 Forms & email
+   - 4.8 Contact and email
 5. [Testing & quality gates](#5-testing--quality-gates)
 6. [Deployment](#6-deployment)
 7. [Troubleshooting](#7-troubleshooting)
@@ -56,12 +57,12 @@ src/features/     ← WHAT pages look like (section components) — visual chang
 
 ```
 content/writing/my-post.mdx
-  → src/lib/content.ts (gray-matter parse + zod validate + reading-time)
+  → src/lib/content.ts (YAML frontmatter parse + zod validate + reading-time)
     → src/app/writing/[slug]/page.tsx (generateStaticParams + generateMetadata + MDXRemote)
       → prebuilt HTML at /writing/my-post (also: sitemap.xml, feed.xml, llms.txt updated automatically)
 ```
 
-Everything is prerendered at build time. There is no database, no CMS, no runtime content fetch. The only dynamic endpoint is `/api/contact` (email sending).
+Everything is prerendered at build time. There is no database, CMS, or runtime content fetch. Contact is handled by direct links to the email client; there are no server-side form or email endpoints.
 
 ---
 
@@ -193,7 +194,7 @@ Steps:
 
 **One file: `content/site.ts`.** Name, role line, positioning line, email, phone, location, founding year, all social URLs (personal + ATAS).
 
-It feeds: header/footer, hero, about card, contact section, press page, all metadata, all JSON-LD (`sameAs`, `founder`, `worksFor`), `llms.txt`, RSS, contact form recipient. Change it once; everywhere updates.
+It feeds: header/footer, hero, about card, contact section, press page, all metadata, all JSON-LD (`sameAs`, `founder`, `worksFor`), `llms.txt`, and RSS. Change it once; everywhere updates.
 
 Never hardcode these values in components — if you find one, move it to `site.ts`.
 
@@ -205,7 +206,7 @@ Never hardcode these values in components — if you find one, move it to `site.
 - Component overrides (Button, Card, Chip): in `components`. Note the **contrast-tuned** values: contained buttons use `#0B63D8` (not brand blue) because white-on-#1877F2 fails WCAG AA — don't revert without re-running axe tests.
 - `customShadows` are plain rgba strings (theme-safe for server components).
 
-**Typography:** `src/theme/theme.ts` `typography` block. The font family is injected as `var(--font-dm-sans)` from `src/app/layout.tsx` (`next/font`). To change fonts: edit the `DM_Sans` import in `layout.tsx` + the string passed to `buildTheme` in `ThemeRegistry.tsx`. Keep to ONE family (decision 0002).
+**Typography:** `src/theme/theme.ts` `typography` block. The font family is provided by the `--font-dm-sans` stack in `src/app/globals.css` and consumed as `var(--font-dm-sans)` by `ThemeRegistry.tsx`. Keep to ONE family (decision 0002). The stack is intentionally build-local so production builds do not depend on fetching Google Fonts.
 
 **Global CSS** (prose styling, selection, focus rings, reduced-motion): `src/app/globals.css`.
 
@@ -247,7 +248,6 @@ Home composes sections in `src/app/page.tsx`. Each section is a component in `sr
 |---|---|---|
 | Hero | `features/identity/Hero.tsx` | `content/site.ts` |
 | About | `features/identity/AboutSection.tsx` | `content/site.ts` |
-| Focus band | `features/focus/FocusSection.tsx` | `content/home.ts` (slides + metrics) |
 | ATAS spotlight | `features/ventures/VentureSpotlight.tsx` | hardcoded copy + gallery array in the file |
 | Work highlights | `features/ventures/WorkHighlights.tsx` | `content/work/*` (auto) |
 | Writing preview | `features/writing/WritingPreview.tsx` | `content/writing/*` (auto) |
@@ -255,23 +255,37 @@ Home composes sections in `src/app/page.tsx`. Each section is a component in `sr
 
 To reorder/remove sections: edit `src/app/page.tsx`. To rewrite copy: prefer moving it to `content/` and passing props (the established pattern).
 
-### 3.9 Update speaking engagements
+### 3.9 Edit the biography
+
+The biography is a long-form, statically rendered page at `/biography`.
+
+- Edit the narrative chapters and personal facts in `content/biography.ts`.
+- Edit the people directory and their verified external links in `content/bio-people.ts`.
+- Mention a person inside chapter prose with the exact token `{{slug|Displayed Name}}`; the token becomes an internal link to that person's directory entry.
+- Keep every token slug present in `BIO_PEOPLE`. The unit suite checks this relationship, and the page emits a `Person` JSON-LD node for every directory entry.
+- The biography page intentionally uses one canonical URL with fragment anchors instead of thin one-person doorway pages. This gives search engines visible context and entity relationships without creating duplicate low-value pages.
+- If the page title or summary changes, update the `biography` card in `scripts/generate-og.mjs` and run `pnpm og`.
+
+The biography page is also registered in `src/lib/nav.ts`, `src/app/sitemap.ts`, and `src/app/llms.txt/route.ts`. Keep all four surfaces aligned when changing its public URL.
+
+### 3.10 Update speaking engagements
 
 `content/speaking.ts`: add to `engagements[]` (`title`, `venue`, `year`). The page shows the honest empty-state automatically while the array is empty.
 
-### 3.10 Update the press kit
+### 3.11 Update the press kit
 
 `content/press.ts`: `shortBio`, `longBio` (paragraphs separated by blank lines), `boilerplate`, `factSheet` rows, `downloads` (files live in `public/docs/` — replace the PDFs there, keep the same names or update paths).
 
-### 3.11 Regenerate social-share (OG) images
+### 3.12 Regenerate social-share (OG) images
 
-OG cards are **static PNGs** generated by `scripts/generate-og.mjs` (sharp + SVG), run automatically before every build (`prebuild` script). 16 cards → `public/og/*.png`.
+OG cards are **static PNGs** generated by `scripts/generate-og.mjs` (sharp + SVG), run automatically before every build (`prebuild` script). The 22 configured cards live in `public/og/*.png`.
 
 - Add/edit cards: edit the `cards` array in the script (title lines, subtitle, optional circular image), then `pnpm og`.
+- Existing cards are preserved during normal builds so externally designed replacements are not overwritten. Use `pnpm run og -- --force` only when you intentionally want to regenerate the generated fallback cards.
 - Pages reference them via `buildMetadata({ ogImage: '/og/<name>.png' })` or the default path convention `/og/<route-with-dashes>.png`.
 - Changing a page title does **not** auto-update its OG card text — edit the script entry too (this is deliberate: deterministic, zero-runtime images).
 
-### 3.12 Change navigation or footer links
+### 3.13 Change navigation or footer links
 
 `src/lib/nav.ts`: `NAV_ITEMS` (header + mobile drawer; `kind: 'section'` links smooth-scroll on home, `kind: 'route'` navigates), `FOOTER_LINKS`, `SOCIAL_PROFILES`.
 
@@ -281,7 +295,7 @@ OG cards are **static PNGs** generated by `scripts/generate-og.mjs` (sharp + SVG
 
 ### 4.1 Rendering model & the server/client boundary
 
-Every page is **statically prerendered** at build (see the `○/●` table in `pnpm build` output). Only `/api/contact` is dynamic.
+Every page is **statically prerendered** at build (see the `○/●` table in `pnpm build` output). There are no dynamic application endpoints.
 
 | Kind | Where | Rules |
 |---|---|---|
@@ -295,7 +309,7 @@ Data crosses the boundary as **props** (e.g. home page calls `getPosts()` and pa
 ### 4.2 Content pipeline
 
 `src/lib/content.ts`:
-- Reads `content/writing/*.mdx`, `content/work/*.mdx`, `content/now.mdx` with `gray-matter`.
+- Reads `content/writing/*.mdx`, `content/work/*.mdx`, `content/now.mdx` with the supported `js-yaml` loader.
 - Validates frontmatter with **zod schemas** (`postSchema`, `workSchema`) — invalid content fails the build with the exact field.
 - Dates: YAML unquoted dates arrive as `Date` objects → preprocessed to ISO strings. Store ISO in frontmatter; format for display only at render (`lib/utils/date.ts`).
 - `reading-time` computes `readingMinutes`.
@@ -315,7 +329,7 @@ All centralized in `src/lib/seo.ts` + `src/lib/jsonld.ts`:
 
 - `buildMetadata({ title, description, path, … })` → canonical, robots, Open Graph, Twitter tags, absolute OG image URL (`metadataBase` in root layout makes relative paths absolute).
 - Title template: pages set `title: 'ATAS — ATAS Venture'` → rendered as `ATAS — ATAS Venture` (no suffix duplication; root layout sets the default for `/`).
-- JSON-LD: one global graph in `layout.tsx` (`WebSite`, `ProfilePage`, `Person`, `Organization`) + per-page graphs (`Article`, `CreativeWork`, `BreadcrumbList`) via the `<JsonLd data={graph(...)} />` component. Nodes reference each other by `@id`.
+- JSON-LD: one global graph in `layout.tsx` (`WebSite`, `ProfilePage`, `Person`, `Organization`) plus per-page graphs (`Article`, `CreativeWork`, `ProfilePage`, `Person`, `ItemList`, `BreadcrumbList`) via the `<JsonLd data={graph(...)} />` component. Nodes reference each other by `@id`. The biography graph describes the founder and each named person with visible context and verified external links.
 - Generated routes: `src/app/sitemap.ts`, `robots.ts`, `feed.xml/route.ts`, `llms.txt/route.ts` — all `force-static`, all derived from the content layer.
 - Legacy redirects + security headers + CSP-Report-Only: `next.config.mjs` `redirects()` / `headers()`.
 
@@ -338,18 +352,16 @@ All centralized in `src/lib/seo.ts` + `src/lib/jsonld.ts`:
 
 ### 4.7 Analytics
 
-One facade: `src/lib/analytics.ts` `trackEvent(name, params)` → Plausible (if `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`) → gtag → console (dev only).
+One facade: `src/lib/analytics.ts` `trackEvent(name, params)` sends to every configured provider: Plausible (if `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`) and Google Analytics 4 (if `NEXT_PUBLIC_GA_MEASUREMENT_ID`), or console (dev only) when neither is configured.
 
 - Vercel Analytics (pageviews) + Speed Insights (Web Vitals) are always on in production (`layout.tsx`); they 404 locally — harmless.
-- Events already instrumented: `cta_click`, `venture_open`, `post_open`, `contact_channel_click`, `social_click`, `newsletter_signup`.
+- Google Analytics 4 is loaded only when `NEXT_PUBLIC_GA_MEASUREMENT_ID` matches a `G-...` measurement ID. The root layout also records client-side route transitions.
+- Events already instrumented: `cta_click`, `venture_open`, `post_open`, `contact_channel_click`, and `social_click`.
 - To add tracking: call `trackEvent` in any client component. Server components can't track (no browser) — wrap the interaction in a client child if needed.
 
-### 4.8 Forms & email
+### 4.8 Contact and email
 
-`src/app/api/contact/route.ts`: zod validation → honeypot field (`company`) → time-trap (`startedAt` ≥ 2.5 s) → IP rate limit (5/hour) → Resend send.
-
-- **Without `RESEND_API_KEY`** the API returns 503 and the UI renders a mailto card instead (decided at build time — set the key, then redeploy).
-- Newsletter block renders only when `NEXT_PUBLIC_BUTTONDOWN_URL` is set (plain form POST to Buttondown).
+`src/features/contact/ContactSection.tsx` exposes direct email, phone, location, and social links. Messages are sent from the visitor's own email client; the website does not receive, store, or proxy contact submissions.
 
 ---
 
@@ -358,7 +370,7 @@ One facade: `src/lib/analytics.ts` `trackEvent(name, params)` → Plausible (if 
 | Suite | Command | Protects |
 |---|---|---|
 | Unit (Vitest) | `pnpm test` | Content validity (frontmatter, ISO dates, unique slugs, manifest coverage), SEO builders (absolute URLs, ISO dates in JSON-LD), date utils |
-| E2E (Playwright) | `pnpm test:e2e` | All 12 routes render with unique titles + zero console errors, canonicals present, JSON-LD graph valid, legacy redirects, real 404, hero positioning copy, **axe accessibility** (serious/critical = 0 on 3 pages), contact fallback |
+| E2E (Playwright) | `pnpm test:e2e` | All 22 routes render with unique titles + zero console errors, canonicals present, JSON-LD graph valid, legacy redirects, real 404, hero positioning copy, active-header state, and **axe accessibility** (serious/critical = 0 on 4 pages) |
 | Lighthouse CI | `npx @lhci/cli autorun` | Perf ≥ 90, A11y ≥ 95, BP ≥ 95, SEO = 100, LCP/CLS/weight budgets (`lighthouserc.json`) |
 | ESLint + tsc | `pnpm lint && pnpm typecheck` | Code health, RSC-boundary mistakes |
 
@@ -386,7 +398,7 @@ Env vars (all optional except site URL): see `.env.example` and README table.
 | Grey box instead of an image | Path not in `media-manifest.json` | Add the prep job + `pnpm media` (see 3.4) |
 | Icon renders blank / pops in late | Icon missing from offline `icon-sets.ts` | Add its body (see 4.6) |
 | `getMediaEntry` returns undefined at build | Manifest out of date | `pnpm media` |
-| Contact form hidden in production | `RESEND_API_KEY` unset at build time | Set env var in Vercel, redeploy |
+| Contact link not working | Incorrect value in `content/site.ts` | Verify the email/phone values and their `mailto:`/`tel:` links |
 | Dark mode flashes white on load | Inline scheme script removed/blocked | Restore the `<script dangerouslySetInnerHTML>` in `layout.tsx` body start |
 | Playwright fails with server already running | Stale `next start` on :3011 | Kill node processes, re-run |
 | pnpm skips native builds (sharp fails) | pnpm ≥ 11 blocks postinstall by default | `pnpm approve-builds` (allowlist lives in `pnpm-workspace.yaml`) |

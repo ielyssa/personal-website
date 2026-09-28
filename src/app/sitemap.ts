@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: absoluteUrl('/'), changeFrequency: 'weekly', priority: 1 },
     { url: absoluteUrl('/work'), changeFrequency: 'monthly', priority: 0.9 },
     { url: absoluteUrl('/writing'), changeFrequency: 'weekly', priority: 0.9 },
+    { url: absoluteUrl('/biography'), changeFrequency: 'monthly', priority: 0.9 },
     { url: absoluteUrl('/speaking'), changeFrequency: 'monthly', priority: 0.7 },
     { url: absoluteUrl('/press'), changeFrequency: 'monthly', priority: 0.7 },
     { url: absoluteUrl('/now'), changeFrequency: 'weekly', priority: 0.6 },
@@ -32,4 +33,3 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [...staticRoutes, ...workRoutes, ...postRoutes];
 }
-

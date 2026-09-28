@@ -8,6 +8,7 @@ const DEFAULT_OG_PATHS: Record<string, string> = {
   '/': '/og/home.png',
   '/work': '/og/work-index.png',
   '/writing': '/og/writing-index.png',
+  '/biography': '/og/biography.png',
   '/speaking': '/og/speaking.png',
   '/press': '/og/press.png',
   '/now': '/og/now.png',
@@ -24,6 +25,7 @@ type BuildMetadataInput = {
   publishedTime?: string;
   modifiedTime?: string;
   tags?: string[];
+  keywords?: string[];
   noindex?: boolean;
 };
 
@@ -33,7 +35,10 @@ export function absoluteUrl(pathname: string) {
 }
 
 function defaultOgPath(path: string) {
-  return DEFAULT_OG_PATHS[path] ?? `/og/${path.replace(/^\//, '').replace(/\/$/, '').replaceAll('/', '-')}.png`;
+  return (
+    DEFAULT_OG_PATHS[path] ??
+    `/og/${path.replace(/^\//, '').replace(/\/$/, '').replaceAll('/', '-')}.png`
+  );
 }
 
 export function buildMetadata({
@@ -45,6 +50,7 @@ export function buildMetadata({
   publishedTime,
   modifiedTime,
   tags,
+  keywords,
   noindex = false,
 }: BuildMetadataInput): Metadata {
   const url = absoluteUrl(path);
@@ -64,6 +70,7 @@ export function buildMetadata({
     description,
     creator: SITE.name,
     publisher: SITE.name,
+    ...(keywords?.length ? { keywords } : {}),
     alternates: { canonical: url },
     robots: noindex
       ? { index: false, follow: true }
@@ -96,4 +103,3 @@ export function buildMetadata({
     },
   };
 }
-

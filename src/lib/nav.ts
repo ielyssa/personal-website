@@ -9,7 +9,7 @@ export type NavItem = {
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '/', kind: 'route' },
   { label: 'About', href: '/#about', kind: 'section' },
-  // { label: 'Focus', href: '/#focus', kind: 'section' },
+  { label: 'Biography', href: '/biography', kind: 'route' },
   { label: 'ATAS', href: '/#atas', kind: 'section' },
   { label: 'Work', href: '/work', kind: 'route' },
   { label: 'Writing', href: '/writing', kind: 'route' },
@@ -19,6 +19,7 @@ export const NAV_ITEMS: NavItem[] = [
 
 export const FOOTER_LINKS = [
   { label: 'Work', href: '/work' },
+  { label: 'Biography', href: '/biography' },
   { label: 'Writing', href: '/writing' },
   { label: 'Speaking', href: '/speaking' },
   { label: 'Press', href: '/press' },
@@ -36,4 +37,3 @@ export const SOCIAL_PROFILES = [
 export function isHomePathname(pathname: string) {
   return pathname === '/';
 }
-

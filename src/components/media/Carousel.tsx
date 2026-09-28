@@ -1,6 +1,14 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type ReactNode,
+} from 'react';
 
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -111,7 +119,10 @@ export function Carousel({
         position: 'relative',
         borderRadius: 2.5,
         overflow: 'hidden',
-        '&:focus-visible': { outline: (th) => `2px solid ${th.palette.primary.main}`, outlineOffset: 3 },
+        '&:focus-visible': {
+          outline: (th) => `2px solid ${th.palette.primary.main}`,
+          outlineOffset: 3,
+        },
       }}
     >
       <Box sx={{ position: 'relative', aspectRatio: `${aspect}`, bgcolor: 'background.neutral' }}>
@@ -170,9 +181,21 @@ export function Carousel({
       ) : null}
 
       {showControls && count > 1 ? (
-        <Stack direction="row" spacing={0.75} sx={{ position: 'absolute', top: 12, right: 12, zIndex: 3 }}>
-          <ControlButton label={`Previous slide in ${ariaLabel}`} direction="prev" onClick={() => goTo(index - 1)} />
-          <ControlButton label={`Next slide in ${ariaLabel}`} direction="next" onClick={() => goTo(index + 1)} />
+        <Stack
+          direction="row"
+          spacing={0.75}
+          sx={{ position: 'absolute', top: 12, right: 12, zIndex: 3 }}
+        >
+          <ControlButton
+            label={`Previous slide in ${ariaLabel}`}
+            direction="prev"
+            onClick={() => goTo(index - 1)}
+          />
+          <ControlButton
+            label={`Next slide in ${ariaLabel}`}
+            direction="next"
+            onClick={() => goTo(index + 1)}
+          />
         </Stack>
       ) : null}
 
@@ -198,7 +221,11 @@ export function Carousel({
       ) : null}
 
       {showDots && count > 1 ? (
-        <Stack direction="row" spacing={0.5} sx={{ position: 'absolute', top: 14, left: 14, zIndex: 3 }}>
+        <Stack
+          direction="row"
+          spacing={0.5}
+          sx={{ position: 'absolute', top: 14, left: 14, zIndex: 3 }}
+        >
           {slides.map((slide, slideIndex) => (
             <Box
               key={slide.id}
@@ -217,7 +244,8 @@ export function Carousel({
                 border: 'none',
                 cursor: 'pointer',
                 borderRadius: 99,
-                bgcolor: slideIndex === index ? 'common.white' : alpha(theme.palette.common.white, 0.55),
+                bgcolor:
+                  slideIndex === index ? 'common.white' : alpha(theme.palette.common.white, 0.55),
                 transition: 'width 240ms ease',
               }}
             />
@@ -254,8 +282,10 @@ function ControlButton({
         '&:hover': { bgcolor: (th) => alpha(th.palette.common.black, 0.65) },
       }}
     >
-      <Iconify icon={direction === 'prev' ? 'carbon:chevron-left' : 'carbon:chevron-right'} width={18} />
+      <Iconify
+        icon={direction === 'prev' ? 'carbon:chevron-left' : 'carbon:chevron-right'}
+        width={18}
+      />
     </IconButton>
   );
 }
-

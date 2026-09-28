@@ -34,7 +34,13 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Params) {
   const { slug } = await params;
   const post = getPost(slug);
-  if (!post) return buildMetadata({ title: 'Not found', description: 'Post not found.', path: `/writing/${slug}`, noindex: true });
+  if (!post)
+    return buildMetadata({
+      title: 'Not found',
+      description: 'Post not found.',
+      path: `/writing/${slug}`,
+      noindex: true,
+    });
   return buildMetadata({
     title: post.title,
     description: post.summary,
@@ -109,7 +115,13 @@ export default async function WritingDetailPage({ params }: Params) {
 
         <Typography
           component="h1"
-          sx={{ fontWeight: 800, fontSize: { xs: '2rem', sm: '2.6rem', md: '3.1rem' }, letterSpacing: '-0.025em', lineHeight: 1.08, mb: 3 }}
+          sx={{
+            fontWeight: 800,
+            fontSize: { xs: '2rem', sm: '2.6rem', md: '3.1rem' },
+            letterSpacing: '-0.025em',
+            lineHeight: 1.08,
+            mb: 3,
+          }}
         >
           {post.title}
         </Typography>
@@ -149,9 +161,20 @@ export default async function WritingDetailPage({ params }: Params) {
             navigation replaces the single "Profile" link, since a reader
             who finished an article is more likely to want the next one
             than to jump to the homepage. */}
-        <Box sx={{ mt: { xs: 7, md: 9 }, pt: { xs: 4, md: 5 }, borderTop: '1px solid', borderColor: 'divider' }}>
+        <Box
+          sx={{
+            mt: { xs: 7, md: 9 },
+            pt: { xs: 4, md: 5 },
+            borderTop: '1px solid',
+            borderColor: 'divider',
+          }}
+        >
           <Typography sx={{ fontWeight: 800, mb: 0.5 }}>{SITE.name}</Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.65, maxWidth: '52ch' }}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ lineHeight: 1.65, maxWidth: '52ch' }}
+          >
             {`${SITE.roleLine} — ${SITE.positioningLine}`}
           </Typography>
         </Box>
@@ -172,12 +195,20 @@ export default async function WritingDetailPage({ params }: Params) {
               <Box
                 component={Link}
                 href={`/writing/${prevPost.slug}`}
-                sx={{ display: 'block', textDecoration: 'none', color: 'inherit', '&:hover .nav-title': { backgroundSize: '100% 1px' } }}
+                sx={{
+                  display: 'block',
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  '&:hover .nav-title': { backgroundSize: '100% 1px' },
+                }}
               >
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
                   Newer
                 </Typography>
-                <Typography className="nav-title" sx={{ fontWeight: 700, display: 'inline-block', ...UNDERLINE_SX }}>
+                <Typography
+                  className="nav-title"
+                  sx={{ fontWeight: 700, display: 'inline-block', ...UNDERLINE_SX }}
+                >
                   {prevPost.title}
                 </Typography>
               </Box>
@@ -199,7 +230,10 @@ export default async function WritingDetailPage({ params }: Params) {
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
                   Older
                 </Typography>
-                <Typography className="nav-title" sx={{ fontWeight: 700, display: 'inline-block', ...UNDERLINE_SX }}>
+                <Typography
+                  className="nav-title"
+                  sx={{ fontWeight: 700, display: 'inline-block', ...UNDERLINE_SX }}
+                >
                   {nextPost.title}
                 </Typography>
               </Box>

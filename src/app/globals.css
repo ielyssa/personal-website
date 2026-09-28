@@ -1,5 +1,6 @@
 :root {
   color-scheme: light dark;
+  --font-dm-sans: 'DM Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
 html {

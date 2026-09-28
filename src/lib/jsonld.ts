@@ -47,13 +47,18 @@ export function organizationNode() {
     name: SITE.atas.shortName,
     alternateName: SITE.atas.name,
     url: SITE.atas.site,
-    description: 'A Rwandan AI research and product company building systems that understand Rwanda.',
+    description:
+      'A Rwandan AI research and product company building systems that understand Rwanda.',
     logo: absoluteUrl('/media/logos/atas.webp'),
     image: absoluteUrl('/media/logos/atas.webp'),
     foundingDate: SITE.foundedAtas,
     foundingLocation: { '@type': 'Place', name: 'Kigali, Rwanda' },
     areaServed: { '@type': 'Country', name: 'Rwanda' },
-    knowsAbout: ['Artificial intelligence', 'Kinyarwanda language technology', 'Education technology'],
+    knowsAbout: [
+      'Artificial intelligence',
+      'Kinyarwanda language technology',
+      'Education technology',
+    ],
     founder: { '@id': `${root}/#person` },
     sameAs: [SITE.atas.linkedin, SITE.atas.x, SITE.atas.instagram, SITE.atas.youtube],
   };
@@ -90,8 +95,11 @@ export function webPageNode(input: {
   path: string;
   name: string;
   description: string;
-  type?: 'WebPage' | 'ContactPage';
+  type?: 'WebPage' | 'ContactPage' | 'ProfilePage';
   dateModified?: string;
+  mainEntity?: object;
+  mentions?: object[];
+  keywords?: string[];
 }) {
   const root = canonicalRoot();
   const url = absoluteUrl(input.path);
@@ -105,6 +113,9 @@ export function webPageNode(input: {
     about: { '@id': `${root}/#person` },
     inLanguage: 'en',
     ...(input.dateModified ? { dateModified: input.dateModified } : {}),
+    ...(input.mainEntity ? { mainEntity: input.mainEntity } : {}),
+    ...(input.mentions?.length ? { mentions: input.mentions } : {}),
+    ...(input.keywords?.length ? { keywords: input.keywords } : {}),
   };
 }
 
@@ -124,17 +135,81 @@ export function collectionPageNode(input: { path: string; name: string; descript
   };
 }
 
-export function itemListNode(path: string, items: { name: string; path: string }[]) {
+export function itemListNode(
+  path: string,
+  items: { name: string; path: string }[],
+  anchor = 'itemlist'
+) {
   const url = absoluteUrl(path);
   return {
     '@type': 'ItemList',
-    '@id': `${url}#itemlist`,
+    '@id': `${url}#${anchor}`,
     itemListElement: items.map((item, index) => ({
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
       url: absoluteUrl(item.path),
     })),
+  };
+}
+
+export function biographyPageNode(input: {
+  description: string;
+  keywords: string[];
+  people: { slug: string }[];
+}) {
+  const root = canonicalRoot();
+  const url = absoluteUrl('/biography');
+  return {
+    '@type': ['ProfilePage', 'WebPage'],
+    '@id': `${url}#webpage`,
+    url,
+    name: `${SITE.name} — Biography`,
+    description: input.description,
+    isPartOf: { '@id': `${root}/#website` },
+    about: { '@id': `${root}/#person` },
+    mainEntity: { '@id': `${root}/#person` },
+    hasPart: { '@id': `${url}#people-list` },
+    mentions: input.people.map((person) => ({ '@id': `${url}#person-${person.slug}` })),
+    keywords: input.keywords,
+    primaryImageOfPage: {
+      '@type': 'ImageObject',
+      url: absoluteUrl('/media/person/elyssa-avatar-800.webp'),
+    },
+    inLanguage: 'en',
+  };
+}
+
+export function biographyPersonNode(person: {
+  slug: string;
+  name: string;
+  context: string;
+  instagram?: string;
+  website?: string;
+  company?: { name: string; url: string };
+}) {
+  const url = absoluteUrl(`/biography#person-${person.slug}`);
+  const sameAs = [person.website, person.instagram].filter((value): value is string =>
+    Boolean(value)
+  );
+  return {
+    '@type': 'Person',
+    '@id': url,
+    name: person.name,
+    description: person.context,
+    url,
+    ...(sameAs.length ? { sameAs } : {}),
+    ...(person.company
+      ? {
+          affiliation: {
+            '@type': 'Organization',
+            name: person.company.name,
+            url: person.company.url,
+          },
+        }
+      : {}),
+    subjectOf: { '@id': `${absoluteUrl('/biography')}#webpage` },
+    inLanguage: 'en',
   };
 }
 
@@ -166,7 +241,12 @@ export function articleNode(post: {
   };
 }
 
-export function creativeWorkNode(work: { name: string; slug: string; summary: string; cover: string }) {
+export function creativeWorkNode(work: {
+  name: string;
+  slug: string;
+  summary: string;
+  cover: string;
+}) {
   const root = canonicalRoot();
   return {
     '@type': 'CreativeWork',
@@ -197,4 +277,3 @@ export function breadcrumbNode(items: { name: string; path: string }[]) {
 export function graph(...nodes: object[]) {
   return { '@context': 'https://schema.org', '@graph': nodes };
 }
-

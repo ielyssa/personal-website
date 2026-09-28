@@ -39,7 +39,10 @@ export default function SpeakingPage() {
             name: 'Speaking & Media',
             description: 'Speaking topics, media resources, and downloadable assets.',
           }),
-          breadcrumbNode([{ name: 'Home', path: '/' }, { name: 'Speaking & Media', path: '/speaking' }])
+          breadcrumbNode([
+            { name: 'Home', path: '/' },
+            { name: 'Speaking & Media', path: '/speaking' },
+          ])
         )}
       />
       <Box sx={{ mb: { xs: 6, md: 8 } }}>
@@ -114,9 +117,13 @@ export default function SpeakingPage() {
             </Typography>
 
             {SPEAKING.engagements.length === 0 ? (
-              <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.75, maxWidth: '56ch' }}>
-                Public sessions will be listed here as they happen. In the meantime, the topics above reflect
-                current material — reach out for a full session outline.
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                sx={{ lineHeight: 1.75, maxWidth: '56ch' }}
+              >
+                Public sessions will be listed here as they happen. In the meantime, the topics
+                above reflect current material — reach out for a full session outline.
               </Typography>
             ) : (
               <Stack divider={<Box sx={{ borderBottom: '1px solid', borderColor: 'divider' }} />}>
@@ -188,13 +195,23 @@ export default function SpeakingPage() {
               }}
             >
               <Typography
-                sx={{ fontSize: 'clamp(1.4rem, 2vw, 1.75rem)', fontWeight: 800, letterSpacing: '-0.01em', mb: 2 }}
+                sx={{
+                  fontSize: 'clamp(1.4rem, 2vw, 1.75rem)',
+                  fontWeight: 800,
+                  letterSpacing: '-0.01em',
+                  mb: 2,
+                }}
               >
                 Invite me to speak
               </Typography>
-              <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.75, mb: 4, maxWidth: '42ch' }}>
-                I give conference talks, podcast interviews, panel sessions, and workshops on Rwanda-first AI
-                infrastructure, Kinyarwanda language technology, and building AI companies from Kigali.
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                sx={{ lineHeight: 1.75, mb: 4, maxWidth: '42ch' }}
+              >
+                I give conference talks, podcast interviews, panel sessions, and workshops on
+                Rwanda-first AI infrastructure, Kinyarwanda language technology, and building AI
+                companies from Kigali.
               </Typography>
 
               <Stack spacing={1.6} sx={{ mb: 5 }}>
@@ -248,7 +265,14 @@ export default function SpeakingPage() {
         </Box>
       </Box>
 
-      <Box sx={{ mt: { xs: 8, md: 10 }, pt: { xs: 4, md: 5 }, borderTop: '1px solid', borderColor: 'divider' }}>
+      <Box
+        sx={{
+          mt: { xs: 8, md: 10 },
+          pt: { xs: 4, md: 5 },
+          borderTop: '1px solid',
+          borderColor: 'divider',
+        }}
+      >
         <Typography
           component="a"
           href="/"

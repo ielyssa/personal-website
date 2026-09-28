@@ -26,63 +26,78 @@
   },
   "/media/work/academiaplus-01.webp": {
     "width": 1440,
-    "height": 960,
-    "blurDataURL": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAABQAgCdASoQAAsAA4BaJagCdLoAAxw3S/B4AAAA/uoxs+ZNYrojlXRCHJUu0U4dyxUMKvh+0dX2u2S2HtUI7f/JT+u72W8Z/0KNlEnUAAA="
+    "height": 810,
+    "blurDataURL": "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAACQAQCdASoQAAkAA4BaJaQAApC3SAAA/vi6b19XIF+lrs/it7ZlvY90vCOYunJZP5hnKd8DAAA="
   },
   "/media/work/academiaplus-02.webp": {
     "width": 1440,
-    "height": 960,
-    "blurDataURL": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAABwAgCdASoQAAsAA4BaJbACdLoAEJUVq0Yxet4AAP7p/p1aZ5BtgbMU9GThYNFyyOl1IG+v4xhmmOMBBxVkApDS+Agzv/kp/Xd7Ldp36E2PaYAA"
+    "height": 810,
+    "blurDataURL": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAADwAQCdASoQAAkAA4BaJaQAAt0ACrdzRwAA/vc9rSLAODcXQ9g1sOvRYhZd5FGndB8pjZVv6AAAAA=="
   },
   "/media/work/academiaplus-03.webp": {
     "width": 1440,
-    "height": 960,
-    "blurDataURL": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAABQAgCdASoQAAsAA4BaJbACdLoAAx14CS2XYAAA/uvlQGv4LlWVqOHy9iqUCwZofa744SvvnPWP2ETcuJsAKP/yV5+832W8Z/0Jse0wAAA="
+    "height": 810,
+    "blurDataURL": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAAAQAgCdASoQAAkAA4BaJaQAD4APtnLkln7AAP74Fkla9gFwBrXAYRW/eakRBphw3hCetZREFOz0eO253AAAAA=="
   },
   "/media/work/edubridge-01.webp": {
     "width": 1440,
-    "height": 960,
-    "blurDataURL": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAACQAQCdASoQAAsAA4BaJbACdLoAA5gA/u9XuA7QMo8/Tscj1xNOfQPNbc4kqcCGh/0l3cP/8s/98nvk6k/iF3sYUAA="
+    "height": 810,
+    "blurDataURL": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAACQAQCdASoQAAkAA4BaJaQAAuTqLAAA/vi38qX/h9GtvQWkgpaW1GMzU/o0qCAAAAA="
   },
   "/media/work/edubridge-02.webp": {
     "width": 1440,
-    "height": 960,
-    "blurDataURL": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAAAQAgCdASoQAAsAA4BaJbACdLoAAwKRqUAAAP7p+R3NmQqdYtRG/0JpevRrDpBOe2i9s5BNq4XV8lGtLX/5Z/6TR4u9+P6E2PaYAAAA"
+    "height": 810,
+    "blurDataURL": "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAACQAQCdASoQAAkAA4BaJaQAAueFBcAA/vc+HN2nAXl1nGZVnXm/Fbmi4r2+fb6weN2zOUmylzXPSAAA"
   },
   "/media/work/edubridge-03.webp": {
     "width": 1440,
-    "height": 960,
-    "blurDataURL": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAAAQAgCdASoQAAsAA4BaJbACdLoAAq8dkM8AAP7uoHCWXMss7c3TzL2mf0W9mULJxPVQwBhVTf/5mj9JvyR68PXzLOFrgAAA"
+    "height": 810,
+    "blurDataURL": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAACQAQCdASoQAAkAA4BaJaQAAtojQAAA/vc+mtdg7gwUgKYblQeptjcHHn3+rugScPulPMjLRkx77E14uPAAAAAA"
+  },
+  "/media/work/imizi-01.webp": {
+    "width": 1440,
+    "height": 810,
+    "blurDataURL": "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAADQAQCdASoQAAkAA4BaJaQAAveISALSwAD+9z4LUb2jRFJ8wJ+DRIV39xVOPl4ztA+Oh2aAAAA="
+  },
+  "/media/work/imizi-02.webp": {
+    "width": 1440,
+    "height": 810,
+    "blurDataURL": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAADwAQCdASoQAAkAA4BaJaQAAu1/shmVVYAA/vdAYPozHJvPDiIjNdzDGQbqwlUxNTEXJgAA"
+  },
+  "/media/work/imizi-03.webp": {
+    "width": 1440,
+    "height": 810,
+    "blurDataURL": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAADwAQCdASoQAAkAA4BaJaQAD4kQz0br9QAA/vQMQHNLN2s4rzMQFas3mJ04uzZN6UhkN9PHQ2vClj3Xg7K15KQzvIW4BEGpqzObKCIDhQAAAA=="
   },
   "/media/work/kinyarwanda-tts-01.webp": {
     "width": 1440,
-    "height": 960,
-    "blurDataURL": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADwAQCdASoQAAsAA4BaJbACdLoAAwSheIAA/u6IShEvr81R7JlgFhXXrUh51YX+XnrXiP5xFnkMlf/LP+/3i3i734/Xv/jOoAA="
+    "height": 810,
+    "blurDataURL": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADwAQCdASoQAAkAA4BaJaQAAt49HTi8iAAA/vZqCPE0/hextMfuIlSN6ZCbtiRenbvXkJ9+LrBIwZ+BQ+C+t/KC7uJ1CecAAAA="
   },
   "/media/work/kinyarwanda-tts-02.webp": {
     "width": 1440,
-    "height": 960,
-    "blurDataURL": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAAAQAgCdASoQAAsAA4BaJbACdLoAAv9+edlgAP7s2rT6exyGMDbgMmNg2S8+SQMnMGbf0WLQGPM//maP0m/JHrw9fAH6NAAA"
+    "height": 810,
+    "blurDataURL": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAAAwAQCdASoQAAkAA4BaJaQAA3AA/vPL33H0r57lbFv+XMm8nbZUQblWQAA="
   },
   "/media/work/kinyarwanda-tts-03.webp": {
     "width": 1440,
-    "height": 960,
-    "blurDataURL": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAAAQAgCdASoQAAsAA4BaJbACdLoAAjeSvRAAAP7p94+6cHB0sjug91e30E3nOMP6fi1kuryu7MpM4CmZKgChDkz6PHdg//maPvN+W/kz68pwLcAA"
+    "height": 810,
+    "blurDataURL": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAADQAQCdASoQAAkAA4BaJaQAAuQ26uuTAAD++LoUBypgSpiF61xb6mgwWBYYetsnzMIieKuh26wAAA=="
   },
   "/media/work/atas-mission.webp": {
-    "width": 1536,
-    "height": 1024,
-    "blurDataURL": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAAAQAgCdASoQAAsAA4BaJagCdLoAAjeN7fIAAP7ujE9k66q4gqupMgbS8SqPjcMcK/toD27wFGCf+JBXGJuKfK/8Qu9jCgAA"
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADwAQCdASoQAAkAA4BaJaQAAxZr+jo3rnAA/vcg2HvaSSll4X3HNxpq2XqC6dxj692B/SMCWfWok52s/Ia5ubwAAAA="
   },
   "/media/work/atas-programs.webp": {
-    "width": 1536,
-    "height": 1024,
-    "blurDataURL": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAAAwAgCdASoQAAsAA4BaJbACdLoAAufqvp9aAAD+6jVUAvMvSAkC/wL/U7V7GdvXjlvSJSXRhNsRB1uCMcPi/UH/jePAr4u8e/r5lnC1wAA="
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAADQAQCdASoQAAkAA4BaJaQAD4kO1EpyAAD+9x3Zax2XlHi2c0Lts2Uw7Z/AdGXEGT04qD0uDVfDTfE1K2zeOmAHQAAAAA=="
   },
   "/media/work/atas-impact.webp": {
-    "width": 1536,
-    "height": 1024,
-    "blurDataURL": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAABQAgCdASoQAAsAA4BaJbACdLoAAjbnZccocAAA/uxN6IFdVjwsXN7cOThcQng8JIj3Cn3BVVgiOO3p2mZNBqNdAvv/HNg4+8r0Q8D/r5lnDOYAAAA="
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAADQAQCdASoQAAkAA4BaJaQAAu0bwbS8AAD+9kqeAysppjymyx1Vd76PgHPxumaSf5g2Bgm7QOKZqAAA"
   },
   "/media/focus/focus-rwanda-context-ai.webp": {
     "width": 1400,
@@ -104,24 +119,44 @@
     "height": 933,
     "blurDataURL": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAAAwAgCdASoQAAsAA4BaJagCdLoAAwjozvi4AAD+7oWnjfWCQHyR3FNg8mRKlgvh7WD9TwUfOtCQCFf/yPmt/+N48CvXduG+vgD9MXAA"
   },
-  "/media/blog/atas-journey.webp": {
+  "/media/blog/academiaplus-first-version-failed.webp": {
     "width": 1600,
     "height": 900,
-    "blurDataURL": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAAAwAgCdASoQAAkAA4BaJagCdAYulMPBXT9qAAD+6V/VN+cOzOqpZoES1zxfhxFoXu7kXqRPA55udAgYdziIG4B8Z3g8EfviW0cdPBSlgy+07pGXavCIUmDhys5nShg82gOAAA=="
+    "blurDataURL": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAADQAQCdASoQAAkAA4BaJaQAAsf3SI98AAD++Lpbrh9UE5+P95zge9eA/7s5l9k/dX4hZNGE79dzTGdAAAA="
   },
-  "/media/blog/ml-education.webp": {
+  "/media/blog/confidence-is-not-capacity.webp": {
     "width": 1600,
     "height": 900,
-    "blurDataURL": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADwAQCdASoQAAkAA4BaJbACdADwSac28AAA/nWMxnIF1UBhEklcwysAaYYCS4FA9l3Ik5KFQBKXu2ed/8UPNb2DuT7AH93vo3ONIAAA"
+    "blurDataURL": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAADQAQCdASoQAAkAA4BaJaQAAudfJ1fMAAD++LeYMVTwKCnVs1TfszHy3cAAAA=="
   },
-  "/media/blog/kinyarwanda-tts.webp": {
+  "/media/blog/language-is-not-context.webp": {
     "width": 1600,
     "height": 900,
-    "blurDataURL": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAADQAQCdASoQAAkAA4BaJYwCdAEN4986kAD+9/Bdq3EzQk2OrHwLU0RC6REWSLQ7dYfcvZLv11Wq33lt1RAFmAAA"
+    "blurDataURL": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAAAwAQCdASoQAAkAA4BaJaQAA3AA/vORGVp5W+VlgZCkSVbK8npJzPksqAAAAA=="
   },
-  "/media/blog/data-science-skills.webp": {
+  "/media/blog/learning-tech-with-almost-nothing.webp": {
     "width": 1600,
     "height": 900,
-    "blurDataURL": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAAAQAgCdASoQAAkAA4BaJagCdAD8vzCmVlUAAP73x2R0qWS3aek5We4QFSZGlMitYxQrZjuFihjcOrFdZwJZygTeGsEo0ysqWaUpAAAA"
+    "blurDataURL": "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAACwAQCdASoQAAkAA4BaJaQAAsf3UxpYAP74umkcheNXyRmcphtJU7YOaBnTBTkw3MAAAA=="
+  },
+  "/media/blog/we-turned-a-holiday-into-an-office.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAABQAgCdASoQAAkAA4BaJaQAD4WwgD4q9b70/gAA/vf75dlo0WJ/T7IXFAK7R0D7+3Yh350VvQKcfnWPv60Fenpbbp/i0S9oi6vX570FbwTKzAAA"
+  },
+  "/media/blog/what-a-lost-hackathon-taught-me.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADwAQCdASoQAAkAA4BaJaQAD4ltYi7mr3AA/vKM4Pxae/JBalr/Auhf7RUIQPGDve6FhFh4EsQ/bwjzqwIoF8563ueipCAAAAA="
+  },
+  "/media/blog/why-atas-starts-with-data.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAACwAQCdASoQAAkAA4BaJaQAAueGHCsAAP74uX9jcFLO+93PcBGgskzj/jbB2rlUUkYAAA=="
+  },
+  "/media/blog/build-for-the-people-you-know.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADwAQCdASoQAAkAA4BaJaQAD4ir2ODlWwAA/vYZBDindyRkps3F+K0N74VF21xiXTMlnK9tv/rFa+c2mdeZ1K0mxWrAAAAA"
   }
 }

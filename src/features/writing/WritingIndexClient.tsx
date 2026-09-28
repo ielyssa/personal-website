@@ -52,7 +52,12 @@ export function WritingIndexClient({ posts }: { posts: Post[] }) {
       >
         <TagLink label="All" active={!activeTag} href="/writing" />
         {tags.map((tag) => (
-          <TagLink key={tag} label={tag} active={activeTag === tag} href={`/writing?tag=${encodeURIComponent(tag)}`} />
+          <TagLink
+            key={tag}
+            label={tag}
+            active={activeTag === tag}
+            href={`/writing?tag=${encodeURIComponent(tag)}`}
+          />
         ))}
       </Box>
 
@@ -69,7 +74,11 @@ export function WritingIndexClient({ posts }: { posts: Post[] }) {
           ) : null}
 
           {rest.length ? (
-            <Stack role="list" aria-label="More posts" divider={<Box sx={{ borderBottom: '1px solid', borderColor: 'divider' }} />}>
+            <Stack
+              role="list"
+              aria-label="More posts"
+              divider={<Box sx={{ borderBottom: '1px solid', borderColor: 'divider' }} />}
+            >
               {rest.map((post) => (
                 <PostRow key={post.slug} post={post} />
               ))}
@@ -135,7 +144,7 @@ export function WritingIndexClient({ posts }: { posts: Post[] }) {
             <SmartImage
               src={post.cover}
               alt={post.title}
-              aspect={4 / 3}
+              aspect={16 / 9}
               priority
               sizes="(max-width: 900px) 100vw, 55vw"
               sx={{ borderRadius: 0 }}
@@ -179,7 +188,11 @@ export function WritingIndexClient({ posts }: { posts: Post[] }) {
               </Typography>
             </Box>
 
-            <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.75, maxWidth: '46ch', mb: 2 }}>
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              sx={{ lineHeight: 1.75, maxWidth: '46ch', mb: 2 }}
+            >
               {post.summary}
             </Typography>
 
@@ -227,7 +240,7 @@ export function WritingIndexClient({ posts }: { posts: Post[] }) {
             <SmartImage
               src={post.cover}
               alt={post.title}
-              aspect={16 / 10}
+              aspect={16 / 9}
               sizes="(max-width: 600px) 100vw, 240px"
               sx={{ borderRadius: 0 }}
             />

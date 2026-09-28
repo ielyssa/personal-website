@@ -1,4 +1,5 @@
 import { SITE } from '@content/site';
+import { BIO_PEOPLE } from '@content/bio-people';
 import { getPosts, getWorks } from '@/lib/content';
 import { absoluteUrl } from '@/lib/seo';
 
@@ -14,6 +15,10 @@ export async function GET() {
   const postLines = posts
     .map((post) => `  - [${post.title}](${absoluteUrl(`/writing/${post.slug}`)}): ${post.summary}`)
     .join('\n');
+  const peopleLines = BIO_PEOPLE.map(
+    (person) =>
+      `  - [${person.name}](${absoluteUrl(`/biography#person-${person.slug}`)}): ${person.context}`
+  ).join('\n');
 
   const body = `# ${SITE.name}
 
@@ -29,12 +34,21 @@ ${workLines}
 
 ${postLines}
 
+## Biography
+
+[Biography](${absoluteUrl('/biography')}): IRANKUNDA Elyssa's personal account of growing up and studying in Rwanda, learning software development, founding EduBridge and ATAS, and the people who shaped the journey.
+
+### People named in the biography
+
+${peopleLines}
+
 ## Key pages
 
 - [Home](${absoluteUrl('/')}): profile, mission, and contact paths
 - [Speaking](${absoluteUrl('/speaking')}): topics and media resources
 - [Press kit](${absoluteUrl('/press')}): bios, fact sheet, photos, downloads
 - [Now](${absoluteUrl('/now')}): current focus
+- [Biography](${absoluteUrl('/biography')}): personal history and people directory
 - [Contact](${absoluteUrl('/contact')}): direct channels
 
 ## Contact
@@ -52,4 +66,3 @@ Updated ${new Date().toISOString().slice(0, 10)}.
     headers: { 'Content-Type': 'text/plain; charset=utf-8' },
   });
 }
-

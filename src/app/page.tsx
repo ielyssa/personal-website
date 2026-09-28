@@ -24,7 +24,6 @@ export default function HomePage() {
     <Box>
       <Hero />
       <AboutSection />
-      {/* <FocusSection /> */}
       <VentureSpotlight />
       <WorkHighlights works={works} />
       <WritingPreview posts={posts} />
@@ -32,4 +31,3 @@ export default function HomePage() {
     </Box>
   );
 }
-

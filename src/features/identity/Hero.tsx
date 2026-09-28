@@ -39,7 +39,11 @@ const FACTS = [
 
 export function Hero() {
   return (
-    <Box component="section" id="home" sx={{ pt: { xs: 5, md: 7 }, pb: { xs: 6, md: 8 }, scrollMarginTop: '88px' }}>
+    <Box
+      component="section"
+      id="home"
+      sx={{ pt: { xs: 5, md: 7 }, pb: { xs: 6, md: 8 }, scrollMarginTop: '88px' }}
+    >
       <Container>
         <Box
           sx={{
@@ -80,7 +84,9 @@ export function Hero() {
                 mb: { xs: 4, md: 5 },
               }}
             >
-              {'I build AI companies that understand Rwanda — its languages, geography, and everyday realities. Today that means '}
+              {
+                'I build AI companies that understand Rwanda — its languages, geography, and everyday realities. Today that means '
+              }
               <Box component="span" sx={{ color: 'text.primary', fontWeight: 700 }}>
                 AcademiaPlus
               </Box>
@@ -88,7 +94,7 @@ export function Hero() {
               <Box component="span" sx={{ color: 'text.primary', fontWeight: 700 }}>
                 IMIZI
               </Box>
-              {", our long-term contextual intelligence program."}
+              {', our long-term contextual intelligence program.'}
             </Typography>
 
             <Stack direction="row" spacing={{ xs: 3, sm: 4 }} flexWrap="wrap" useFlexGap>

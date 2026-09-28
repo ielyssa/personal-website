@@ -34,7 +34,10 @@ export default function WritingIndexPage() {
             '/writing',
             posts.map((post) => ({ name: post.title, path: `/writing/${post.slug}` }))
           ),
-          breadcrumbNode([{ name: 'Home', path: '/' }, { name: 'Writing', path: '/writing' }])
+          breadcrumbNode([
+            { name: 'Home', path: '/' },
+            { name: 'Writing', path: '/writing' },
+          ])
         )}
       />
       <Box sx={{ mb: { xs: 6, md: 8 } }}>

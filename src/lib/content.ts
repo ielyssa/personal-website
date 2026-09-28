@@ -1,11 +1,32 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import matter from 'gray-matter';
+import { load as parseYaml } from 'js-yaml';
 import readingTime from 'reading-time';
 import { z } from 'zod';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content');
+
+type ParsedMatter = {
+  data: Record<string, unknown>;
+  content: string;
+};
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function parseMatter(source: string): ParsedMatter {
+  const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
+
+  if (!match) return { data: {}, content: source };
+
+  const parsed = parseYaml(match[1]);
+  return {
+    data: isRecord(parsed) ? parsed : {},
+    content: source.slice(match[0].length),
+  };
+}
 
 const isoDate = z.preprocess(
   (value) => (value instanceof Date ? value.toISOString().slice(0, 10) : value),
@@ -60,7 +81,7 @@ function readMatterFiles(dirName: string) {
   return fs
     .readdirSync(dir)
     .filter((file) => file.endsWith('.mdx') || file.endsWith('.md'))
-    .map((file) => matter(fs.readFileSync(path.join(dir, file), 'utf8')));
+    .map((file) => parseMatter(fs.readFileSync(path.join(dir, file), 'utf8')));
 }
 
 function statusOrder(status: WorkStatus) {
@@ -112,8 +133,7 @@ export function getPost(slug: string): Post | undefined {
 
 export function getNow(): { updated: string; body: string } {
   const raw = fs.readFileSync(path.join(CONTENT_DIR, 'now.mdx'), 'utf8');
-  const matterResult = matter(raw);
+  const matterResult = parseMatter(raw);
   const updated = isoDate.parse(matterResult.data.updated);
   return { updated, body: matterResult.content.trim() };
 }
-

@@ -32,7 +32,12 @@ const UNDERLINE_SX = {
 function Heading({ children }: { children: React.ReactNode }) {
   return (
     <Typography
-      sx={{ fontSize: 'clamp(1.4rem, 2vw, 1.75rem)', fontWeight: 800, letterSpacing: '-0.01em', mb: 2 }}
+      sx={{
+        fontSize: 'clamp(1.4rem, 2vw, 1.75rem)',
+        fontWeight: 800,
+        letterSpacing: '-0.01em',
+        mb: 2,
+      }}
     >
       {children}
     </Typography>
@@ -49,7 +54,10 @@ export default function PressPage() {
             name: 'Press Kit',
             description: 'Official bios, facts, photos, and downloadable media assets.',
           }),
-          breadcrumbNode([{ name: 'Home', path: '/' }, { name: 'Press Kit', path: '/press' }])
+          breadcrumbNode([
+            { name: 'Home', path: '/' },
+            { name: 'Press Kit', path: '/press' },
+          ])
         )}
       />
       <Box sx={{ mb: { xs: 6, md: 8 } }}>
@@ -69,11 +77,18 @@ export default function PressPage() {
         }}
       >
         {/* Left column — bios, read top to bottom like a document */}
-        <Stack divider={<Box sx={{ borderBottom: '1px solid', borderColor: 'divider' }} />} spacing={{ xs: 4, md: 5 }}>
+        <Stack
+          divider={<Box sx={{ borderBottom: '1px solid', borderColor: 'divider' }} />}
+          spacing={{ xs: 4, md: 5 }}
+        >
           <Reveal>
             <Box sx={{ pb: { xs: 4, md: 5 } }}>
               <Heading>Short bio</Heading>
-              <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.85, maxWidth: '68ch' }}>
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                sx={{ lineHeight: 1.85, maxWidth: '68ch' }}
+              >
                 {PRESS.shortBio}
               </Typography>
             </Box>
@@ -100,7 +115,11 @@ export default function PressPage() {
           <Reveal delay={140}>
             <Box>
               <Heading>About ATAS</Heading>
-              <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.85, maxWidth: '68ch', mb: 1.5 }}>
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                sx={{ lineHeight: 1.85, maxWidth: '68ch', mb: 1.5 }}
+              >
                 {PRESS.boilerplate}
               </Typography>
               <Typography
@@ -130,9 +149,18 @@ export default function PressPage() {
             surface: separated from the left column by a single hairline. */}
         <Box sx={{ position: { md: 'sticky' }, top: { md: 112 } }}>
           <Reveal delay={100}>
-            <Box sx={{ pl: { md: 6 }, borderLeft: { md: '1px solid' }, borderColor: { md: 'divider' } }}>
+            <Box
+              sx={{
+                pl: { md: 6 },
+                borderLeft: { md: '1px solid' },
+                borderColor: { md: 'divider' },
+              }}
+            >
               <Heading>Fact sheet</Heading>
-              <Stack divider={<Box sx={{ borderBottom: '1px solid', borderColor: 'divider' }} />} sx={{ mb: 5 }}>
+              <Stack
+                divider={<Box sx={{ borderBottom: '1px solid', borderColor: 'divider' }} />}
+                sx={{ mb: 5 }}
+              >
                 {PRESS.factSheet.map((row) => (
                   <Stack
                     key={row.label}
@@ -202,7 +230,14 @@ export default function PressPage() {
         </Box>
       </Box>
 
-      <Box sx={{ mt: { xs: 8, md: 10 }, pt: { xs: 4, md: 5 }, borderTop: '1px solid', borderColor: 'divider' }}>
+      <Box
+        sx={{
+          mt: { xs: 8, md: 10 },
+          pt: { xs: 4, md: 5 },
+          borderTop: '1px solid',
+          borderColor: 'divider',
+        }}
+      >
         <Typography
           component="a"
           href={`mailto:${SITE.email}`}

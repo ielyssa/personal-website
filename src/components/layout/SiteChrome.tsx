@@ -59,4 +59,3 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
     </Box>
   );
 }
-

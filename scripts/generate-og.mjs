@@ -9,9 +9,14 @@ const ATAS_LOGO = path.join(ROOT, 'public', 'media', 'logos', 'atas.webp');
 
 const W = 1200;
 const H = 630;
+const FORCE_REGENERATE = process.argv.includes('--force');
 
 function esc(s) {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 function wrap(text, max) {
@@ -85,6 +90,10 @@ async function renderCard({ file, kind, image, ...text }) {
     );
   }
   const out = path.join(OUT_DIR, `${file}.png`);
+  if (fs.existsSync(out) && !FORCE_REGENERATE) {
+    console.log(`preserved og/${file}.png`);
+    return;
+  }
   await sharp(Buffer.from(svg)).png({ quality: 92 }).toFile(out);
   console.log(`og/${file}.png`);
 }
@@ -137,6 +146,15 @@ const cards = [
     footer: 'ielyssa.com/now',
   },
   {
+    file: 'biography',
+    kicker: 'Biography',
+    titleLines: ['The journey', 'so far'],
+    subtitle: 'From Rubavu to founding ATAS, and the people who shaped the work.',
+    footer: 'ielyssa.com/biography',
+    image: 'media/person/elyssa-avatar-800.webp',
+    kind: 'person',
+  },
+  {
     file: 'contact',
     kicker: 'Contact',
     titleLines: ['Get in touch'],
@@ -153,11 +171,36 @@ const cards = [
 ];
 
 const works = [
-  { slug: 'atas', name: 'ATAS', sub: 'Alliance for Transformative AI Systems — founded 2025, Kigali.', img: 'media/logos/atas.webp' },
-  { slug: 'academiaplus', name: 'AcademiaPlus', sub: 'National curriculum infrastructure for Rwandan secondary education.', img: null },
-  { slug: 'imizi', name: 'IMIZI', sub: "Rwanda's first Contextual Intelligence Infrastructure.", img: null },
-  { slug: 'edubridge', name: 'EduBridge', sub: 'Predictive student-risk analytics for earlier intervention.', img: null },
-  { slug: 'kinyarwanda-tts', name: 'Kinyarwanda TTS', sub: 'Voice technology built natively for Kinyarwanda.', img: null },
+  {
+    slug: 'atas',
+    name: 'ATAS',
+    sub: 'Alliance for Transformative AI Systems — founded 2025, Kigali.',
+    img: 'media/logos/atas.webp',
+  },
+  {
+    slug: 'academiaplus',
+    name: 'AcademiaPlus',
+    sub: 'National curriculum infrastructure for Rwandan secondary education.',
+    img: null,
+  },
+  {
+    slug: 'imizi',
+    name: 'IMIZI',
+    sub: "Rwanda's first Contextual Intelligence Infrastructure.",
+    img: null,
+  },
+  {
+    slug: 'edubridge',
+    name: 'EduBridge',
+    sub: 'Predictive student-risk analytics for earlier intervention.',
+    img: null,
+  },
+  {
+    slug: 'kinyarwanda-tts',
+    name: 'Kinyarwanda TTS',
+    sub: 'Voice technology built natively for Kinyarwanda.',
+    img: null,
+  },
 ];
 for (const w of works) {
   cards.push({
@@ -170,31 +213,59 @@ for (const w of works) {
   });
 }
 cards.push({
-  file: 'post-building-atas-journey',
+  file: 'post-academiaplus-first-version-failed',
   kicker: 'Writing',
-  titleLines: wrap('Building ATAS: Starting an AI Company in Rwanda', 26),
-  subtitle: 'Why I founded ATAS in Kigali at 20.',
+  titleLines: wrap('The First Version of AcademiaPlus Failed', 26),
+  subtitle: 'Building for Rwanda instead of building for everyone.',
   footer: 'ielyssa.com/writing',
 });
 cards.push({
-  file: 'post-machine-learning-in-education',
+  file: 'post-confidence-is-not-capacity',
   kicker: 'Writing',
-  titleLines: wrap('Machine Learning in Education: The Future is Now', 26),
-  subtitle: 'Curriculum-mapped evidence over raw grades.',
+  titleLines: wrap('Confidence Is Not Capacity', 26),
+  subtitle: 'Keeping ambition honest while ATAS is still early.',
   footer: 'ielyssa.com/writing',
 });
 cards.push({
-  file: 'post-kinyarwanda-tts-project',
+  file: 'post-language-is-not-context',
   kicker: 'Writing',
-  titleLines: wrap('Preserving Kinyarwanda Through AI: The TTS Project', 26),
-  subtitle: 'Voice technology on our own terms.',
+  titleLines: wrap('Fluent Is Not the Same as Understanding', 26),
+  subtitle: 'Why language is only the doorway to context.',
   footer: 'ielyssa.com/writing',
 });
 cards.push({
-  file: 'post-data-science-skills-for-africa',
+  file: 'post-learning-tech-with-almost-nothing',
   kicker: 'Writing',
-  titleLines: wrap('Data Science Skills Every Young African Should Learn', 26),
-  subtitle: 'Builders, not just analysts.',
+  titleLines: wrap('Learning to Build Software With Almost Nothing', 26),
+  subtitle: 'Teaching yourself to build when resources are limited.',
+  footer: 'ielyssa.com/writing',
+});
+cards.push({
+  file: 'post-we-turned-a-holiday-into-an-office',
+  kicker: 'Writing',
+  titleLines: wrap('We Turned a School Holiday Into Our Own Office', 26),
+  subtitle: 'Building without waiting for permission.',
+  footer: 'ielyssa.com/writing',
+});
+cards.push({
+  file: 'post-what-a-lost-hackathon-taught-me',
+  kicker: 'Writing',
+  titleLines: wrap('What a Lost Hackathon Taught Me About Technology', 26),
+  subtitle: 'Useful technology matters more than impressive technology.',
+  footer: 'ielyssa.com/writing',
+});
+cards.push({
+  file: 'post-why-atas-starts-with-data',
+  kicker: 'Writing',
+  titleLines: wrap('Why ATAS Starts With Data, Not a Model', 26),
+  subtitle: 'The patient work underneath AI that understands Rwanda.',
+  footer: 'ielyssa.com/writing',
+});
+cards.push({
+  file: 'post-build-for-the-people-you-know',
+  kicker: 'Writing',
+  titleLines: wrap('Build for the People You Actually Know', 26),
+  subtitle: 'A real place and real constraints are a better starting point.',
   footer: 'ielyssa.com/writing',
 });
 

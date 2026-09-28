@@ -20,7 +20,13 @@ export type ProjectSlide = {
 // photo), advanced by plain hairline-circle controls or native swipe. No
 // autoplay — this section is making an argument in text; the imagery
 // supports it and shouldn't compete for attention on a timer.
-export function ProjectSlides({ slides, aspect = 4 / 3 }: { slides: ProjectSlide[]; aspect?: number }) {
+export function ProjectSlides({
+  slides,
+  aspect = 16 / 9,
+}: {
+  slides: ProjectSlide[];
+  aspect?: number;
+}) {
   const [index, setIndex] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const count = slides.length;
@@ -79,7 +85,7 @@ export function ProjectSlides({ slides, aspect = 4 / 3 }: { slides: ProjectSlide
               scrollSnapAlign: 'start',
               position: 'relative',
               aspectRatio: `${aspect}`,
-              bgcolor: 'background.neutral' as const,
+              bgcolor: 'common.white',
             }}
           >
             <Box
@@ -87,21 +93,37 @@ export function ProjectSlides({ slides, aspect = 4 / 3 }: { slides: ProjectSlide
               src={slide.src}
               alt={slide.alt}
               loading="lazy"
-              sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+              sx={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                objectPosition: 'center',
+                display: 'block',
+              }}
             />
           </Box>
         ))}
       </Box>
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mt: 2.5 }}>
-        <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7, maxWidth: '46ch' }}>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ lineHeight: 1.7, maxWidth: '46ch' }}
+        >
           {active?.caption}
         </Typography>
 
         {count > 1 ? (
           <Stack direction="row" spacing={1} sx={{ flexShrink: 0, ml: 3 }}>
             <SlideButton direction="prev" onClick={() => goTo(index - 1)} />
-            <Typography variant="body2" color="text.secondary" sx={{ px: 0.5, alignSelf: 'center' }}>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ px: 0.5, alignSelf: 'center' }}
+            >
               {`${index + 1} / ${count}`}
             </Typography>
             <SlideButton direction="next" onClick={() => goTo(index + 1)} />
@@ -136,7 +158,10 @@ function SlideButton({ direction, onClick }: { direction: 'prev' | 'next'; onCli
         '&:hover': { borderColor: 'text.primary' },
       }}
     >
-      <Iconify icon={direction === 'prev' ? 'carbon:arrow-left' : 'carbon:arrow-right'} width={15} />
+      <Iconify
+        icon={direction === 'prev' ? 'carbon:arrow-left' : 'carbon:arrow-right'}
+        width={15}
+      />
     </Box>
   );
 }

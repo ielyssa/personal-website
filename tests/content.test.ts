@@ -1,11 +1,35 @@
 import { describe, expect, it } from 'vitest';
 
+import { BIO_CHAPTERS } from '@content/biography';
+import { BIO_PEOPLE } from '@content/bio-people';
 import { getNow, getPost, getPosts, getWork, getWorks } from '@/lib/content';
 
 describe('content layer', () => {
-  it('loads all 4 posts with valid frontmatter', () => {
+  it('keeps biography person links aligned with the people directory', () => {
+    const tokenPattern = /\{\{([a-z0-9-]+)\|([^}]+)\}\}/g;
+    const peopleBySlug = new Map(BIO_PEOPLE.map((person) => [person.slug, person]));
+    const linkedSlugs = new Set<string>();
+
+    for (const chapter of BIO_CHAPTERS) {
+      for (const paragraph of chapter.body) {
+        tokenPattern.lastIndex = 0;
+        let match: RegExpExecArray | null;
+        while ((match = tokenPattern.exec(paragraph)) !== null) {
+          const [, slug, displayedName] = match;
+          const person = peopleBySlug.get(slug);
+          expect(person, `Unknown biography person slug: ${slug}`).toBeDefined();
+          expect(displayedName).toBe(person?.name);
+          linkedSlugs.add(slug);
+        }
+      }
+    }
+
+    expect(linkedSlugs).toEqual(new Set(BIO_PEOPLE.map((person) => person.slug)));
+  });
+
+  it('loads all 8 posts with valid frontmatter', () => {
     const posts = getPosts();
-    expect(posts).toHaveLength(4);
+    expect(posts).toHaveLength(8);
     for (const post of posts) {
       expect(post.title.length).toBeGreaterThan(0);
       expect(post.slug).toMatch(/^[a-z0-9-]+$/);
@@ -32,7 +56,7 @@ describe('content layer', () => {
   });
 
   it('finds a post by slug', () => {
-    const post = getPost('building-atas-journey');
+    const post = getPost('why-atas-starts-with-data');
     expect(post).toBeDefined();
     expect(post?.title).toContain('ATAS');
   });

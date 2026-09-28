@@ -47,42 +47,204 @@ async function processJob(job) {
 }
 
 const jobs = [
-  { input: 'profile-picture.png', out: 'media/person/elyssa-avatar-800.webp', width: 800, crop: [1, 1], quality: 84 },
+  {
+    input: 'profile-picture.png',
+    out: 'media/person/elyssa-avatar-800.webp',
+    width: 800,
+    crop: [1, 1],
+    quality: 84,
+  },
   { input: 'logo/atas-logo-bg.png', out: 'media/logos/atas.webp', width: 256, quality: 88 },
-  { input: 'logo/academiaplus-logo.png', out: 'media/logos/academiaplus.webp', width: 256, quality: 88 },
+  {
+    input: 'logo/academiaplus-logo.png',
+    out: 'media/logos/academiaplus.webp',
+    width: 256,
+    quality: 88,
+  },
   { input: 'logo/edubridge-logo.png', out: 'media/logos/edubridge.webp', width: 256, quality: 88 },
-  { input: 'logo/kinyarwanda-sts-logo.png', out: 'media/logos/kinyarwanda-tts.webp', width: 256, quality: 88 },
+  {
+    input: 'logo/kinyarwanda-sts-logo.png',
+    out: 'media/logos/kinyarwanda-tts.webp',
+    width: 256,
+    quality: 88,
+  },
 
-  { input: 'projects/academiaplus/academiaplus-01.png', out: 'media/work/academiaplus-01.webp', width: 1440, quality: 76 },
-  { input: 'projects/academiaplus/academiaplus-02.png', out: 'media/work/academiaplus-02.webp', width: 1440, quality: 76 },
-  { input: 'projects/academiaplus/academiaplus-03.png', out: 'media/work/academiaplus-03.webp', width: 1440, quality: 76 },
-  { input: 'projects/edubridge/edubridge-01.png', out: 'media/work/edubridge-01.webp', width: 1440, quality: 76 },
-  { input: 'projects/edubridge/edubridge-02.png', out: 'media/work/edubridge-02.webp', width: 1440, quality: 76 },
-  { input: 'projects/edubridge/edubridge-03.png', out: 'media/work/edubridge-03.webp', width: 1440, quality: 76 },
-  { input: 'projects/kinyarwanda-tss/kinyarwanda-tss-01.png', out: 'media/work/kinyarwanda-tts-01.webp', width: 1440, quality: 76 },
-  { input: 'projects/kinyarwanda-tss/kinyarwanda-tss-02.png', out: 'media/work/kinyarwanda-tts-02.webp', width: 1440, quality: 76 },
-  { input: 'projects/kinyarwanda-tss/kinyarwanda-tss-03.png', out: 'media/work/kinyarwanda-tts-03.webp', width: 1440, quality: 76 },
+  {
+    input: 'projects/academiaplus/academiaplus-01.png',
+    out: 'media/work/academiaplus-01.webp',
+    width: 1440,
+    quality: 76,
+  },
+  {
+    input: 'projects/academiaplus/academiaplus-02.png',
+    out: 'media/work/academiaplus-02.webp',
+    width: 1440,
+    quality: 76,
+  },
+  {
+    input: 'projects/academiaplus/academiaplus-03.png',
+    out: 'media/work/academiaplus-03.webp',
+    width: 1440,
+    quality: 76,
+  },
+  {
+    input: 'projects/edubridge/edubridge-01.png',
+    out: 'media/work/edubridge-01.webp',
+    width: 1440,
+    quality: 76,
+  },
+  {
+    input: 'projects/edubridge/edubridge-02.png',
+    out: 'media/work/edubridge-02.webp',
+    width: 1440,
+    quality: 76,
+  },
+  {
+    input: 'projects/edubridge/edubridge-03.png',
+    out: 'media/work/edubridge-03.webp',
+    width: 1440,
+    quality: 76,
+  },
+  {
+    input: 'projects/imizi/imizi-01.png',
+    out: 'media/work/imizi-01.webp',
+    width: 1440,
+    quality: 76,
+  },
+  {
+    input: 'projects/imizi/imizi-02.png',
+    out: 'media/work/imizi-02.webp',
+    width: 1440,
+    quality: 76,
+  },
+  {
+    input: 'projects/imizi/imizi-03.png',
+    out: 'media/work/imizi-03.webp',
+    width: 1440,
+    quality: 76,
+  },
+  {
+    input: 'projects/kinyarwanda-tss/kinyarwanda-tts-01.png',
+    out: 'media/work/kinyarwanda-tts-01.webp',
+    width: 1440,
+    quality: 76,
+  },
+  {
+    input: 'projects/kinyarwanda-tss/kinyarwanda-tts-02.png',
+    out: 'media/work/kinyarwanda-tts-02.webp',
+    width: 1440,
+    quality: 76,
+  },
+  {
+    input: 'projects/kinyarwanda-tss/kinyarwanda-tts-03.png',
+    out: 'media/work/kinyarwanda-tts-03.webp',
+    width: 1440,
+    quality: 76,
+  },
 
   { input: 'atas/atas-mission.png', out: 'media/work/atas-mission.webp', width: 1600, quality: 78 },
-  { input: 'atas/atas-programs.png', out: 'media/work/atas-programs.webp', width: 1600, quality: 78 },
+  {
+    input: 'atas/atas-programs.png',
+    out: 'media/work/atas-programs.webp',
+    width: 1600,
+    quality: 78,
+  },
   { input: 'atas/atas-impact.png', out: 'media/work/atas-impact.webp', width: 1600, quality: 78 },
 
-  { input: 'focus/focus-rwanda-context-ai.png', out: 'media/focus/focus-rwanda-context-ai.webp', width: 1400, quality: 74 },
-  { input: 'focus/focus-research-signals.png', out: 'media/focus/focus-research-signals.webp', width: 1400, quality: 74 },
-  { input: 'focus/focus-language-culture-systems.png', out: 'media/focus/focus-language-culture-systems.webp', width: 1400, quality: 74 },
-  { input: 'focus/focus-entrepreneurial-execution.png', out: 'media/focus/focus-entrepreneurial-execution.webp', width: 1400, quality: 74 },
+  {
+    input: 'focus/focus-rwanda-context-ai.png',
+    out: 'media/focus/focus-rwanda-context-ai.webp',
+    width: 1400,
+    quality: 74,
+  },
+  {
+    input: 'focus/focus-research-signals.png',
+    out: 'media/focus/focus-research-signals.webp',
+    width: 1400,
+    quality: 74,
+  },
+  {
+    input: 'focus/focus-language-culture-systems.png',
+    out: 'media/focus/focus-language-culture-systems.webp',
+    width: 1400,
+    quality: 74,
+  },
+  {
+    input: 'focus/focus-entrepreneurial-execution.png',
+    out: 'media/focus/focus-entrepreneurial-execution.webp',
+    width: 1400,
+    quality: 74,
+  },
 
-  { input: 'blog/atas-journey.jpg', out: 'media/blog/atas-journey.webp', width: 1600, crop: [16, 9], quality: 80 },
-  { input: 'blog/ml-education.png', out: 'media/blog/ml-education.webp', width: 1600, crop: [16, 9], quality: 80 },
-  { input: 'blog/kinyarwanda-tts.png', out: 'media/blog/kinyarwanda-tts.webp', width: 1600, crop: [16, 9], quality: 80 },
-  { input: 'blog/data-science-skills.jpg', out: 'media/blog/data-science-skills.webp', width: 1600, crop: [16, 9], quality: 80 },
+  {
+    input: 'blog/academiaplus-first-version-failed.png',
+    out: 'media/blog/academiaplus-first-version-failed.webp',
+    width: 1600,
+    crop: [16, 9],
+    quality: 80,
+  },
+  {
+    input: 'blog/confidence-is-not-capacity.png',
+    out: 'media/blog/confidence-is-not-capacity.webp',
+    width: 1600,
+    crop: [16, 9],
+    quality: 80,
+  },
+  {
+    input: 'blog/language-is-not-context.png',
+    out: 'media/blog/language-is-not-context.webp',
+    width: 1600,
+    crop: [16, 9],
+    quality: 80,
+  },
+  {
+    input: 'blog/learning-tech-with-almost-nothing.png',
+    out: 'media/blog/learning-tech-with-almost-nothing.webp',
+    width: 1600,
+    crop: [16, 9],
+    quality: 80,
+  },
+  {
+    input: 'blog/we-turned-a-holiday-into-an-office.png',
+    out: 'media/blog/we-turned-a-holiday-into-an-office.webp',
+    width: 1600,
+    crop: [16, 9],
+    quality: 80,
+  },
+  {
+    input: 'blog/what-a-lost-hackathon-taught-me.png',
+    out: 'media/blog/what-a-lost-hackathon-taught-me.webp',
+    width: 1600,
+    crop: [16, 9],
+    quality: 80,
+  },
+  {
+    input: 'blog/why-atas-starts-with-data.png',
+    out: 'media/blog/why-atas-starts-with-data.webp',
+    width: 1600,
+    crop: [16, 9],
+    quality: 80,
+  },
+  {
+    input: 'blog/build-for-the-people-you-know.png',
+    out: 'media/blog/build-for-the-people-you-know.webp',
+    width: 1600,
+    crop: [16, 9],
+    quality: 80,
+  },
 ];
 
 const manifest = {};
 for (const job of jobs) {
   const result = await processJob(job);
-  manifest[result.out] = { width: result.width, height: result.height, blurDataURL: result.blurDataURL };
-  const kb = (fs.statSync(path.join(ROOT, 'public', job.out.replace(/^\//, ''))).size / 1024).toFixed(0);
+  manifest[result.out] = {
+    width: result.width,
+    height: result.height,
+    blurDataURL: result.blurDataURL,
+  };
+  const kb = (
+    fs.statSync(path.join(ROOT, 'public', job.out.replace(/^\//, ''))).size / 1024
+  ).toFixed(0);
   console.log(`${result.out}  ${result.width}x${result.height}  ${kb}KB`);
 }
 

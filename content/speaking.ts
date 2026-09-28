@@ -27,5 +27,11 @@ export const SPEAKING = {
   ],
   // Optional `location` and `link` — leave either out until there's a real
   // recording, writeup, or venue detail to point to.
-  engagements: [] as { title: string; venue: string; year: string; location?: string; link?: string }[],
+  engagements: [] as {
+    title: string;
+    venue: string;
+    year: string;
+    location?: string;
+    link?: string;
+  }[],
 };

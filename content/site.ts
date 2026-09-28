@@ -8,8 +8,9 @@ export const SITE = {
   phoneHref: 'tel:+250788235574',
   location: 'Kigali, Rwanda',
   roleLine: 'Founder & CEO of ATAS',
-  tagline: 'Building AI that understands Rwanda',
-  positioningLine: 'I build AI companies that understand Rwanda.',
+  tagline: 'AI infrastructure that understands Rwanda',
+  positioningLine:
+    'I build AI infrastructure for Rwanda — its languages, geography, and everyday realities.',
   foundedAtas: '2025',
   socials: {
     linkedin: 'https://www.linkedin.com/in/ielyssa',

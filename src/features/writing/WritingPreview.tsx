@@ -96,9 +96,8 @@ export function WritingPreview({ posts }: { posts: Post[] }) {
       // so the strip holds its first/last position in normal document flow.
       const scrollableDistance = spacer.offsetHeight - viewportHeight;
       const scrolled = -rect.top;
-      const progress = scrollableDistance > 0
-        ? Math.min(Math.max(scrolled / scrollableDistance, 0), 1)
-        : 0;
+      const progress =
+        scrollableDistance > 0 ? Math.min(Math.max(scrolled / scrollableDistance, 0), 1) : 0;
 
       const maxShift = track.scrollWidth - track.clientWidth;
       setTranslateX(-progress * Math.max(maxShift, 0));
@@ -125,7 +124,12 @@ export function WritingPreview({ posts }: { posts: Post[] }) {
 
   return (
     <Section id="writing" neutral>
-      <Stack direction="row" justifyContent="space-between" alignItems="flex-end" sx={{ mb: { xs: 5, md: 7 } }}>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="flex-end"
+        sx={{ mb: { xs: 5, md: 7 } }}
+      >
         <SectionHeading
           align="left"
           overline="Writing"
@@ -160,7 +164,9 @@ export function WritingPreview({ posts }: { posts: Post[] }) {
           <Box
             component={Link}
             href={`/writing/${featured.slug}`}
-            onClick={() => trackEvent('post_open', { post: featured.slug, source: 'home_featured' })}
+            onClick={() =>
+              trackEvent('post_open', { post: featured.slug, source: 'home_featured' })
+            }
             sx={{
               display: 'block',
               textDecoration: 'none',
@@ -186,7 +192,7 @@ export function WritingPreview({ posts }: { posts: Post[] }) {
                 <SmartImage
                   src={featured.cover}
                   alt={featured.title}
-                  aspect={4 / 3}
+                  aspect={16 / 9}
                   priority
                   sizes="(max-width: 900px) 100vw, 55vw"
                   sx={{ borderRadius: 0 }}
@@ -258,9 +264,10 @@ export function WritingPreview({ posts }: { posts: Post[] }) {
           ref={spacerRef}
           sx={{
             position: 'relative',
-            height: hiddenCount > 0 && !reduceMotion
-              ? { xs: `calc(100vh + ${spacerExtraVh}vh)`, sm: `calc(100vh + ${spacerExtraVh}vh)` }
-              : 'auto',
+            height:
+              hiddenCount > 0 && !reduceMotion
+                ? { xs: `calc(100vh + ${spacerExtraVh}vh)`, sm: `calc(100vh + ${spacerExtraVh}vh)` }
+                : 'auto',
           }}
         >
           <Box
@@ -306,7 +313,9 @@ export function WritingPreview({ posts }: { posts: Post[] }) {
                   <Box
                     component={Link}
                     href={`/writing/${post.slug}`}
-                    onClick={() => trackEvent('post_open', { post: post.slug, source: 'home_grid' })}
+                    onClick={() =>
+                      trackEvent('post_open', { post: post.slug, source: 'home_grid' })
+                    }
                     sx={{
                       display: 'block',
                       textDecoration: 'none',
@@ -326,7 +335,7 @@ export function WritingPreview({ posts }: { posts: Post[] }) {
                       <SmartImage
                         src={post.cover}
                         alt={post.title}
-                        aspect={16 / 10}
+                        aspect={16 / 9}
                         sizes="(max-width: 600px) 88vw, 40vw"
                         sx={{ borderRadius: 0 }}
                       />

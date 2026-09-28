@@ -16,7 +16,11 @@ import { breadcrumbNode, creativeWorkNode, graph, webPageNode } from '@/lib/json
 import { buildMetadata } from '@/lib/seo';
 import type { WorkStatus } from '@/lib/content';
 
-const STATUS_LABEL: Record<WorkStatus, string> = { active: 'Active product', research: 'Research program', earlier: 'Earlier work' };
+const STATUS_LABEL: Record<WorkStatus, string> = {
+  active: 'Active product',
+  research: 'Research program',
+  earlier: 'Earlier work',
+};
 
 const UNDERLINE_SX = {
   backgroundImage: 'linear-gradient(currentColor, currentColor)',
@@ -35,7 +39,13 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Params) {
   const { slug } = await params;
   const work = getWork(slug);
-  if (!work) return buildMetadata({ title: 'Not found', description: 'Venture not found.', path: `/work/${slug}`, noindex: true });
+  if (!work)
+    return buildMetadata({
+      title: 'Not found',
+      description: 'Venture not found.',
+      path: `/work/${slug}`,
+      noindex: true,
+    });
   return buildMetadata({
     title: `${work.name} — ATAS Venture`,
     description: work.summary,
@@ -49,7 +59,9 @@ export default async function WorkDetailPage({ params }: Params) {
   const work = getWork(slug);
   if (!work) notFound();
 
-  const others = getWorks().filter((item) => item.slug !== work.slug).slice(0, 2);
+  const others = getWorks()
+    .filter((item) => item.slug !== work.slug)
+    .slice(0, 2);
 
   const slides: ProjectSlide[] = work.gallery.map((image) => ({
     id: image.src,
@@ -114,13 +126,26 @@ export default async function WorkDetailPage({ params }: Params) {
 
       <Typography
         component="h1"
-        sx={{ fontWeight: 800, fontSize: { xs: '2.25rem', md: '3.25rem' }, letterSpacing: '-0.02em', lineHeight: 1.05, mb: 2.5 }}
+        sx={{
+          fontWeight: 800,
+          fontSize: { xs: '2.25rem', md: '3.25rem' },
+          letterSpacing: '-0.02em',
+          lineHeight: 1.05,
+          mb: 2.5,
+        }}
       >
         {work.name}
       </Typography>
 
       <Typography
-        sx={{ fontWeight: 500, fontSize: { xs: '1.1rem', md: '1.3rem' }, lineHeight: 1.6, color: 'text.secondary', maxWidth: '48ch', mb: { xs: 5, md: 6 } }}
+        sx={{
+          fontWeight: 500,
+          fontSize: { xs: '1.1rem', md: '1.3rem' },
+          lineHeight: 1.6,
+          color: 'text.secondary',
+          maxWidth: '48ch',
+          mb: { xs: 5, md: 6 },
+        }}
       >
         {work.summary}
       </Typography>
@@ -136,7 +161,7 @@ export default async function WorkDetailPage({ params }: Params) {
         <Box>
           {slides.length > 0 ? (
             <Box sx={{ mb: { xs: 5, md: 6 } }}>
-              <ProjectSlides slides={slides} aspect={16 / 10} />
+              <ProjectSlides slides={slides} aspect={16 / 9} />
             </Box>
           ) : null}
 
@@ -179,7 +204,13 @@ export default async function WorkDetailPage({ params }: Params) {
               </Typography>
               <Stack divider={<Box sx={{ borderBottom: '1px solid', borderColor: 'divider' }} />}>
                 {Object.entries(work.facts).map(([label, value]) => (
-                  <Stack key={label} direction="row" justifyContent="space-between" spacing={2} sx={{ py: 1.3 }}>
+                  <Stack
+                    key={label}
+                    direction="row"
+                    justifyContent="space-between"
+                    spacing={2}
+                    sx={{ py: 1.3 }}
+                  >
                     <Typography variant="body2" color="text.secondary">
                       {label}
                     </Typography>

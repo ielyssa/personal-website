@@ -21,7 +21,11 @@ export const metadata = buildMetadata({
   ogImage: '/og/work-index.png',
 });
 
-const STATUS_LABEL: Record<WorkStatus, string> = { active: 'Active product', research: 'Research program', earlier: 'Earlier work' };
+const STATUS_LABEL: Record<WorkStatus, string> = {
+  active: 'Active product',
+  research: 'Research program',
+  earlier: 'Earlier work',
+};
 const STATUS_ORDER: WorkStatus[] = ['active', 'research', 'earlier'];
 
 const UNDERLINE_SX = {
@@ -36,7 +40,9 @@ function groupByStatus(works: Work[]) {
   const groups = new Map<WorkStatus, Work[]>();
   for (const status of STATUS_ORDER) groups.set(status, []);
   for (const work of works) groups.get(work.status)?.push(work);
-  return STATUS_ORDER.map((status) => ({ status, items: groups.get(status) ?? [] })).filter((group) => group.items.length > 0);
+  return STATUS_ORDER.map((status) => ({ status, items: groups.get(status) ?? [] })).filter(
+    (group) => group.items.length > 0
+  );
 }
 
 export default function WorkIndexPage() {
@@ -56,7 +62,10 @@ export default function WorkIndexPage() {
             '/work',
             works.map((work) => ({ name: work.name, path: `/work/${work.slug}` }))
           ),
-          breadcrumbNode([{ name: 'Home', path: '/' }, { name: 'Work', path: '/work' }])
+          breadcrumbNode([
+            { name: 'Home', path: '/' },
+            { name: 'Work', path: '/work' },
+          ])
         )}
       />
       <Box sx={{ mb: { xs: 6, md: 8 } }}>
@@ -97,7 +106,10 @@ export default function WorkIndexPage() {
                       alignItems: 'baseline',
                     }}
                   >
-                    <Typography color="text.secondary" sx={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600 }}>
+                    <Typography
+                      color="text.secondary"
+                      sx={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600 }}
+                    >
                       {work.number ?? String(index + 1).padStart(2, '0')}
                     </Typography>
 
@@ -126,7 +138,11 @@ export default function WorkIndexPage() {
                     <Typography
                       variant="body2"
                       color="text.secondary"
-                      sx={{ gridColumn: { xs: '2', md: 'auto' }, textAlign: { xs: 'left', md: 'right' }, whiteSpace: 'nowrap' }}
+                      sx={{
+                        gridColumn: { xs: '2', md: 'auto' },
+                        textAlign: { xs: 'left', md: 'right' },
+                        whiteSpace: 'nowrap',
+                      }}
                     >
                       {work.period}
                     </Typography>
@@ -138,7 +154,14 @@ export default function WorkIndexPage() {
         ))}
       </Stack>
 
-      <Box sx={{ mt: { xs: 8, md: 10 }, pt: { xs: 4, md: 5 }, borderTop: '1px solid', borderColor: 'divider' }}>
+      <Box
+        sx={{
+          mt: { xs: 8, md: 10 },
+          pt: { xs: 4, md: 5 },
+          borderTop: '1px solid',
+          borderColor: 'divider',
+        }}
+      >
         <Typography
           component={Link}
           href="/"

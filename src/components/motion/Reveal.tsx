@@ -50,4 +50,3 @@ export function Reveal({ children, delay = 0, threshold = 0.15 }: RevealProps) {
     </Box>
   );
 }
-

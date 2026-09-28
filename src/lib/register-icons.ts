@@ -39,4 +39,3 @@ export function registerIcons() {
 
   areIconsRegistered = true;
 }
-

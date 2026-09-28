@@ -74,13 +74,25 @@ export function ContactSection() {
 
             <Stack divider={<Box sx={{ borderBottom: '1px solid', borderColor: 'divider' }} />}>
               {CHANNELS.slice(1).map((channel) => (
-                <Stack key={channel.label} direction="row" alignItems="center" spacing={2} sx={{ py: 1.8 }}>
-                  <Iconify icon={channel.icon} width={17} style={{ flexShrink: 0, opacity: 0.55 }} />
+                <Stack
+                  key={channel.label}
+                  direction="row"
+                  alignItems="center"
+                  spacing={2}
+                  sx={{ py: 1.8 }}
+                >
+                  <Iconify
+                    icon={channel.icon}
+                    width={17}
+                    style={{ flexShrink: 0, opacity: 0.55 }}
+                  />
                   {channel.href ? (
                     <Typography
                       component="a"
                       href={channel.href}
-                      onClick={() => trackEvent('contact_channel_click', { channel: channel.label })}
+                      onClick={() =>
+                        trackEvent('contact_channel_click', { channel: channel.label })
+                      }
                       sx={{
                         display: 'inline-block',
                         fontWeight: 700,
@@ -143,7 +155,9 @@ export function ContactSection() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  onClick={() => trackEvent('social_click', { platform: social.label, location: 'contact' })}
+                  onClick={() =>
+                    trackEvent('social_click', { platform: social.label, location: 'contact' })
+                  }
                   sx={{
                     display: 'inline-flex',
                     color: 'text.secondary',

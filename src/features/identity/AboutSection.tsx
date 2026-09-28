@@ -1,9 +1,15 @@
+'use client';
+
+import Link from 'next/link';
+
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { Reveal } from '@/components/motion/Reveal';
+import { Iconify } from '@/components/ui/iconify';
 import { Section, SectionHeading } from '@/components/ui/section';
+import { trackEvent } from '@/lib/analytics';
 
 // A few honest, specific-feeling personal details, told plainly rather than
 // as marketing copy. Edit these to match what's actually true — they're
@@ -12,13 +18,23 @@ import { Section, SectionHeading } from '@/components/ui/section';
 const ASIDES = [
   {
     label: 'Right now',
-    value: "I'm ATAS's only full-time person, so most days move between writing research notes, debugging a model, and answering a support email — in that order, sometimes twice.",
+    value:
+      "I'm ATAS's only full-time person, so most days move between writing research notes, debugging a model, and answering a support email — in that order, sometimes twice.",
   },
   {
     label: 'Outside ATAS',
-    value: 'Kigali is home in the literal sense — it\'s where I grew up, and "Rwanda-first" isn\'t an abstraction I chose, it\'s the only version of this problem I actually know from the inside.',
+    value:
+      "Rwanda is home in the literal sense — it's where I grew up, and \"Rwanda-first\" isn't an abstraction I chose, it's the only version of this problem I actually know from the inside.",
   },
 ];
+
+const UNDERLINE_SX = {
+  backgroundImage: 'linear-gradient(currentColor, currentColor)',
+  backgroundSize: '0% 1px',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: '0 100%',
+  transition: 'background-size 380ms cubic-bezier(0.4, 0, 0.2, 1)',
+};
 
 export function AboutSection() {
   return (
@@ -49,26 +65,40 @@ export function AboutSection() {
                 maxWidth: '38ch',
               }}
             >
-              I started paying attention the day I watched a voice assistant fail to understand my own
-              grandmother — not because she said something unusual, but because it was never built to
-              hear her in the first place.
+              I started paying attention the day I watched my father ask AI for advice on a problem
+              only he actually understood — and get back an answer that could have been written for
+              anyone, anywhere.
             </Typography>
           </Reveal>
 
           <Reveal delay={80}>
             <Typography color="text.secondary" sx={{ lineHeight: 1.85, maxWidth: '58ch' }}>
-              That stuck with me longer than it probably should have. Every AI product I tried after that
-              treated Kinyarwanda, and the way Rwandans actually mix it with English and French, as an
-              edge case to patch in later — if at all. It wasn&apos;t a technical limitation. It was a decision
-              nobody outside Rwanda had a reason to question.
+              By then, AI had gotten fluent in Kinyarwanda. That was never really the problem.
+              Speaking a language and understanding how things actually work in a place are two
+              different achievements — and only one of them was getting solved.
             </Typography>
           </Reveal>
 
           <Reveal delay={140}>
-            <Typography color="text.secondary" sx={{ lineHeight: 1.85, maxWidth: '58ch' }}>
-              I started ATAS at 20 because I didn&apos;t think anyone else was going to fix that from the
-              outside, and I&apos;d rather spend my twenties building the thing I wished existed than waiting
-              for someone else to get around to it.
+            <Typography
+              component={Link}
+              href="/biography"
+              onClick={() =>
+                trackEvent('cta_click', { cta: 'full_story', location: 'about_section' })
+              }
+              sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 1,
+                color: 'text.primary',
+                textDecoration: 'none',
+                fontWeight: 700,
+                ...UNDERLINE_SX,
+                '&:hover': { backgroundSize: '100% 1px' },
+              }}
+            >
+              Read the full story
+              <Iconify icon="carbon:arrow-right" width={17} />
             </Typography>
           </Reveal>
         </Stack>
@@ -85,7 +115,10 @@ export function AboutSection() {
             pt: { xs: 1, md: 0.5 },
           }}
         >
-          <Stack divider={<Box sx={{ borderBottom: '1px solid', borderColor: 'divider' }} />} spacing={0}>
+          <Stack
+            divider={<Box sx={{ borderBottom: '1px solid', borderColor: 'divider' }} />}
+            spacing={0}
+          >
             {ASIDES.map((aside, index) => (
               <Reveal key={aside.label} delay={100 + index * 70}>
                 <Box sx={{ py: index === 0 ? 0 : 3, pb: 3 }}>

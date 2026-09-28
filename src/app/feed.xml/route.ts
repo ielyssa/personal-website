@@ -51,4 +51,3 @@ ${items}
     headers: { 'Content-Type': 'application/rss+xml; charset=utf-8' },
   });
 }
-

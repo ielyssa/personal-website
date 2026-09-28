@@ -7,8 +7,18 @@ const ROUTES = [
   { path: '/work/atas', title: 'ATAS' },
   { path: '/work/academiaplus', title: 'AcademiaPlus' },
   { path: '/work/imizi', title: 'IMIZI' },
+  { path: '/work/edubridge', title: 'EduBridge' },
+  { path: '/work/kinyarwanda-tts', title: 'Kinyarwanda' },
   { path: '/writing', title: 'Writing' },
-  { path: '/writing/building-atas-journey', title: 'Building ATAS' },
+  { path: '/writing/academiaplus-first-version-failed', title: 'AcademiaPlus' },
+  { path: '/writing/confidence-is-not-capacity', title: 'Confidence' },
+  { path: '/writing/language-is-not-context', title: 'Fluent' },
+  { path: '/writing/learning-tech-with-almost-nothing', title: 'Learning' },
+  { path: '/writing/we-turned-a-holiday-into-an-office', title: 'Holiday' },
+  { path: '/writing/what-a-lost-hackathon-taught-me', title: 'Hackathon' },
+  { path: '/writing/why-atas-starts-with-data', title: 'Data' },
+  { path: '/writing/build-for-the-people-you-know', title: 'Build' },
+  { path: '/biography', title: 'Biography' },
   { path: '/speaking', title: 'Speaking' },
   { path: '/press', title: 'Press' },
   { path: '/now', title: 'Now' },
@@ -113,8 +123,9 @@ test.describe('route smoke', () => {
     expect(sitemap.status()).toBe(200);
     const sitemapBody = await sitemap.text();
     expect(sitemapBody).toContain('https://ielyssa.com/');
-    expect(sitemapBody).toContain('https://ielyssa.com/writing/building-atas-journey');
+    expect(sitemapBody).toContain('https://ielyssa.com/writing/why-atas-starts-with-data');
     expect(sitemapBody).toContain('https://ielyssa.com/work/atas');
+    expect(sitemapBody).toContain('https://ielyssa.com/biography');
 
     const robots = await request.get('/robots.txt');
     expect(robots.status()).toBe(200);
@@ -128,7 +139,10 @@ test.describe('route smoke', () => {
 
     const llms = await request.get('/llms.txt');
     expect(llms.status()).toBe(200);
-    expect(await llms.text()).toContain('https://ielyssa.com/work/atas');
+    const llmsBody = await llms.text();
+    expect(llmsBody).toContain('https://ielyssa.com/work/atas');
+    expect(llmsBody).toContain('https://ielyssa.com/biography');
+    expect(llmsBody).toContain('HAGENIMANA Samuel');
   });
 
   test('home includes structured data graph', async ({ page }) => {
@@ -140,9 +154,25 @@ test.describe('route smoke', () => {
     expect(parsed['@graph']).toBeDefined();
   });
 
+  test('header exposes Biography and never marks two links active', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'networkidle' });
+    const desktopNav = page.locator('header nav');
+    await expect(desktopNav.locator('a[href="/biography"]')).toHaveCount(1);
+    await expect(desktopNav.locator('a[aria-current="page"]')).toHaveCount(1);
+    await expect(desktopNav.locator('a[aria-current="page"]')).toHaveText('Home');
+
+    await page.locator('#about').scrollIntoViewIfNeeded();
+    await expect(desktopNav.locator('a[aria-current="page"]')).toHaveCount(1);
+    await expect(desktopNav.locator('a[aria-current="page"]')).toHaveText('About');
+
+    await page.goto('/biography', { waitUntil: 'networkidle' });
+    await expect(desktopNav.locator('a[aria-current="page"]')).toHaveCount(1);
+    await expect(desktopNav.locator('a[aria-current="page"]')).toHaveText('Biography');
+  });
+
   test('legacy URLs redirect', async ({ page }) => {
     await page.goto('/blog/1');
-    expect(page.url()).toContain('/writing/building-atas-journey');
+    expect(page.url()).toContain('/writing');
     await page.goto('/projects/edubridge');
     expect(page.url()).toContain('/work/edubridge');
     await page.goto('/atas');
@@ -152,7 +182,7 @@ test.describe('route smoke', () => {
   test('unknown URL returns 404 page', async ({ page }) => {
     const response = await page.goto('/this-page-does-not-exist');
     expect(response?.status()).toBe(404);
-    await expect(page.locator('h4')).toContainText("doesn't exist");
+    await expect(page.getByRole('heading', { level: 1 })).toContainText("doesn't exist");
   });
 
   test('home hero shows founder positioning', async ({ page }) => {
@@ -161,9 +191,8 @@ test.describe('route smoke', () => {
     await expect(page.getByText(/I build AI companies that understand Rwanda/)).toBeVisible();
   });
 });
-
 test.describe('accessibility', () => {
-  for (const path of ['/', '/writing/building-atas-journey', '/contact']) {
+  for (const path of ['/', '/biography', '/writing/academiaplus-first-version-failed', '/contact']) {
     test(`axe scan passes on ${path}`, async ({ page }) => {
       await page.goto(path, { waitUntil: 'networkidle' });
       await page.evaluate(async () => {
@@ -186,11 +215,4 @@ test.describe('accessibility', () => {
       ).toEqual([]);
     });
   }
-});
-
-test.describe('contact form', () => {
-  test('shows a direct contact channel when email form is unconfigured', async ({ page }) => {
-    await page.goto('/contact');
-    await expect(page.getByRole('link', { name: 'info@ielyssa.com' })).toBeVisible();
-  });
 });

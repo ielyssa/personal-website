@@ -32,7 +32,15 @@ export function Footer() {
 
   return (
     <>
-      <Box component="footer" sx={{ pt: { xs: 6, md: 8 }, pb: { xs: 4, md: 5 }, borderTop: '1px solid', borderColor: 'divider' }}>
+      <Box
+        component="footer"
+        sx={{
+          pt: { xs: 6, md: 8 },
+          pb: { xs: 4, md: 5 },
+          borderTop: '1px solid',
+          borderColor: 'divider',
+        }}
+      >
         <Container>
           <Stack
             direction={{ xs: 'column', sm: 'row' }}
@@ -42,7 +50,9 @@ export function Footer() {
             sx={{ mb: { xs: 5, md: 6 } }}
           >
             <Box>
-              <Typography sx={{ fontWeight: 800, fontSize: '1.1rem', letterSpacing: '-0.01em', mb: 0.4 }}>
+              <Typography
+                sx={{ fontWeight: 800, fontSize: '1.1rem', letterSpacing: '-0.01em', mb: 0.4 }}
+              >
                 IRANKUNDA Elyssa
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -59,7 +69,12 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  sx={{ display: 'inline-flex', color: 'text.secondary', transition: 'color 200ms ease', '&:hover': { color: 'text.primary' } }}
+                  sx={{
+                    display: 'inline-flex',
+                    color: 'text.secondary',
+                    transition: 'color 200ms ease',
+                    '&:hover': { color: 'text.primary' },
+                  }}
                 >
                   <Iconify icon={social.icon} width={19} />
                 </Typography>
