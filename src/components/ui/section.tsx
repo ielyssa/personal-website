@@ -59,23 +59,24 @@ export function Section({
   neutral?: boolean;
   sx?: object;
 }) {
+  // Anchor the content, rather than the padded section wrapper. This keeps
+  // header navigation from stopping in the section's decorative top spacing.
+  const anchorSx = id ? { scrollMarginTop: { xs: '72px', md: '84px' } } : undefined;
+
   return (
     <Box
-      id={id}
       component="section"
       sx={[
         {
           py: { xs: 7, md: 11 },
-          // The section's own top padding already creates breathing room below
-          // the fixed header. A large scroll margin here would add that space
-          // twice whenever a header anchor is clicked.
-          scrollMarginTop: { xs: '8px', md: '16px' },
           ...(neutral && { bgcolor: 'background.default' }),
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
-      <Container>{children}</Container>
+      <Container id={id} sx={anchorSx}>
+        {children}
+      </Container>
     </Box>
   );
 }

@@ -12,11 +12,13 @@ import Typography from '@mui/material/Typography';
 import { Iconify } from '@/components/ui/iconify';
 import { FOOTER_LINKS, SOCIAL_PROFILES } from '@/lib/nav';
 
+const SCROLL_TO_TOP_THRESHOLD = 200;
+
 export function Footer() {
   const [showTop, setShowTop] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setShowTop(window.scrollY > 480);
+    const onScroll = () => setShowTop(window.scrollY > SCROLL_TO_TOP_THRESHOLD);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -114,6 +116,7 @@ export function Footer() {
       <Fade in={showTop}>
         <Box
           component="button"
+          type="button"
           aria-label="Scroll back to top"
           onClick={scrollTop}
           sx={{
