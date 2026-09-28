@@ -23,7 +23,7 @@ import {
 import { buildMetadata } from '@/lib/seo';
 
 const BIOGRAPHY_DESCRIPTION =
-  "IRANKUNDA Elyssa's personal biography: from growing up and studying in Rubavu to founding ATAS, with the friends and collaborators who shaped the journey.";
+  'Biography of IRANKUNDA Elyssa, Founder & CEO of ATAS, building Rwanda-first AI systems rooted in language, place, culture, and everyday life.';
 const BIOGRAPHY_KEYWORDS = [
   'IRANKUNDA Elyssa biography',
   'Elyssa Irankunda story',
@@ -35,8 +35,7 @@ const BIOGRAPHY_KEYWORDS = [
 
 export const metadata = buildMetadata({
   title: 'Biography',
-  description:
-    "IRANKUNDA Elyssa's journey from Rubavu to founding ATAS — a Rwanda-first AI company built one late night, one honest reckoning at a time.",
+  description: BIOGRAPHY_DESCRIPTION,
   path: '/biography',
   ogImage: '/og/biography.png',
   keywords: BIOGRAPHY_KEYWORDS,
